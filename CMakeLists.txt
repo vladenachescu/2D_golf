@@ -6,6 +6,7 @@ set(MAIN_PROJECT_NAME "oop")
 set(MAIN_EXECUTABLE_NAME "${MAIN_PROJECT_NAME}")
 
 
+
 project(${MAIN_PROJECT_NAME})
 # set(CMAKE_PROJECT_VERSION_MAJOR 0)
 # set(CMAKE_PROJECT_VERSION_MINOR 0)
@@ -45,12 +46,25 @@ include(cmake/CopyHelper.cmake)
 
 # find_package(Threads REQUIRED)
 
-###############################################################################
+
+
+set(SFML_DIR "C:/SFML-3.0.2/lib/cmake/SFML")
+
+find_package(SFML 3 REQUIRED COMPONENTS Graphics Window Audio)
+
+add_executable(${MAIN_EXECUTABLE_NAME}
+        main.cpp
+)
+
+target_link_libraries(${MAIN_EXECUTABLE_NAME}
+        SFML::Graphics
+        SFML::Window
+        SFML::Audio
+)
+
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${MAIN_EXECUTABLE_NAME}
-    main.cpp
-)
+
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
 # NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
