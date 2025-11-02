@@ -54,7 +54,26 @@ find_package(SFML 3 REQUIRED COMPONENTS Graphics Window Audio)
 
 add_executable(${MAIN_EXECUTABLE_NAME}
         main.cpp
+        heather/Vector2D.h
+        cls/Vector2D.cpp
+        heather/Shot.h
+        cls/Shot.cpp
+        heather/Hole.h
+        heather/Wall.h
+        cls/Wall.cpp
+        heather/WaterHazard.h
+        heather/SandTrap.h
+        cls/WaterHazard.cpp
+        cls/SandTrap.cpp
+        cls/Hole.cpp
+        heather/Player.h
+        cls/Player.cpp
+        cls/Game.cpp
+        heather/Game.h
 )
+
+target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/heather)
+
 
 target_link_libraries(${MAIN_EXECUTABLE_NAME}
         SFML::Graphics
