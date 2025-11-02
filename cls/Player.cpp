@@ -52,6 +52,21 @@ void Player::recordShot(const Shot &shot, const Vector2D &newPosition, bool haza
     hazardHistory_.push_back(hazardTriggered);
 }
 
+    void Player::resetPositionToLastSafe() {
+    if (shotHistory_.empty()) {
+        return;
+    }
+
+
+    for (int i = static_cast<int>(hazardHistory_.size()) - 1; i >= 0; --i) {
+        if (!hazardHistory_[i]) {
+            return;
+        }
+    }
+
+    position_ = Vector2D{0.0, 0.0};
+}
+
 double Player::totalScore() const {
     return std::accumulate(strokes_.begin(), strokes_.end(), 0.0);
 }

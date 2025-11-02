@@ -23,6 +23,7 @@ namespace golf {
         void recordShot(const Shot &shot, const Vector2D &newPosition, bool hazardTriggered);
         double totalScore() const;
         bool lastShotWasHazard() const;
+        void resetPositionToLastSafe();
 
     private:
         friend std::ostream &operator<<(std::ostream &os, const Player &player);

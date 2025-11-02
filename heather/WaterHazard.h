@@ -14,6 +14,7 @@ namespace golf {
         const Vector2D &maxCorner() const;
         Vector2D center() const;
         bool contains(const Vector2D &point) const;
+        bool intersectsSegment(const Vector2D &a, const Vector2D &b) const;
 
     private:
         Vector2D minCorner_;

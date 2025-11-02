@@ -54,7 +54,8 @@ Vector2D Hole::simulateBallRoll(const Vector2D &start, const Shot &shot, double 
     }
 
     for (const auto &hazard : waterHazards_) {
-        if (hazard.contains(destination)) {
+
+        if (hazard.contains(destination) || hazard.intersectsSegment(start, destination)) {
             hazardTriggered = true;
             return start;
         }
