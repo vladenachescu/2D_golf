@@ -36,7 +36,6 @@ namespace golf {
 
         bool isInSand(const Vector2D &position) const;
         bool isInWater(const Vector2D &position) const;
-        bool bounceAgainstWall(const Vector2D &start, Vector2D &destination) const;
     };
 
     std::ostream &operator<<(std::ostream &os, const Hole &hole);
