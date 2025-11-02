@@ -4,9 +4,8 @@
 #include <ostream>
 
 namespace golf {
-    namespace {
-        constexpr double EPSILON = 1e-6;
-    }
+
+    constexpr double EPSILON = 1e-6;
 
     Wall::Wall(const Vector2D &start, const Vector2D &end) : start_{start}, end_{end} {}
 
