@@ -2,10 +2,59 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iomanip>
-#include <limits>
 #include <ostream>
-#include <utility>
+
+namespace {
+constexpr double EPS = 1e-6;
+
+bool segmentEntryParameter(const golf::Vector2D &start, const golf::Vector2D &end,
+                           const golf::Vector2D &minCorner, const golf::Vector2D &maxCorner,
+                           double &entryT) {
+    const double minX = std::min(minCorner.x(), maxCorner.x());
+    const double maxX = std::max(minCorner.x(), maxCorner.x());
+    const double minY = std::min(minCorner.y(), maxCorner.y());
+    const double maxY = std::max(minCorner.y(), maxCorner.y());
+
+    const golf::Vector2D displacement = end - start;
+    const double dx = displacement.x();
+    const double dy = displacement.y();
+
+    double t0 = 0.0;
+    double t1 = 1.0;
+
+    const auto clip = [&](double p, double q) -> bool {
+        if (std::abs(p) < EPS) {
+            return q >= 0.0;
+        }
+
+        const double r = q / p;
+        if (p < 0.0) {
+            if (r > t1) {
+                return false;
+            }
+            t0 = std::max(t0, r);
+        } else {
+            if (r < t0) {
+                return false;
+            }
+            t1 = std::min(t1, r);
+        }
+        return true;
+    };
+
+    if (!clip(-dx, start.x() - minX) || !clip(dx, maxX - start.x()) || !clip(-dy, start.y() - minY) ||
+        !clip(dy, maxY - start.y())) {
+        return false;
+    }
+
+    if (t0 > t1 || t1 < 0.0 || t0 > 1.0) {
+        return false;
+    }
+
+    entryT = std::clamp(t0, 0.0, 1.0);
+    return true;
+}
+}
 
 namespace golf {
 
@@ -34,38 +83,125 @@ bool Hole::inHazard(const Vector2D &position) const {
 
 Vector2D Hole::simulateBallRoll(const Vector2D &start, const Shot &shot, double friction,
                                 bool &hazardTriggered) const {
-    const Vector2D desiredMove = shot.velocity();
-    Vector2D displacement = desiredMove.scaled(std::max(0.0, 1.0 - friction));
-    Vector2D destination = start + displacement;
-
     hazardTriggered = false;
 
-    if (bounceAgainstWall(start, destination, displacement)) {
-        hazardTriggered = true;
+    const Vector2D strokeStart = start;
+
+    Vector2D displacement = shot.velocity().scaled(std::max(0.0, 1.0 - friction));
+    const double initialDistance = displacement.magnitude();
+    if (initialDistance <= EPS) {
+        return start;
     }
 
-    for (const auto &trap : sandTraps_) {
-        if (trap.contains(destination)) {
+    Vector2D direction = displacement.normalized();
+    double remainingDistance = initialDistance;
+    Vector2D currentPosition = start;
+
+    constexpr int MAX_EVENTS = 16;
+    for (int step = 0; step < MAX_EVENTS && remainingDistance > EPS; ++step) {
+        const Vector2D segmentEnd = currentPosition + direction.scaled(remainingDistance);
+
+        enum class Event { None, Sand, Water, Wall };
+        struct Hit {
+            Event type{Event::None};
+            double t{1.1};
+            const SandTrap *sand{nullptr};
+            const WaterHazard *water{nullptr};
+            const Wall *wall{nullptr};
+        };
+
+        Hit hit;
+
+        for (const auto &trap : sandTraps_) {
+            double entryT = 0.0;
+            if (!segmentEntryParameter(currentPosition, segmentEnd, trap.minCorner(), trap.maxCorner(), entryT)) {
+                continue;
+            }
+            if (entryT < hit.t - EPS) {
+                hit.type = Event::Sand;
+                hit.t = entryT;
+                hit.sand = &trap;
+                hit.water = nullptr;
+                hit.wall = nullptr;
+            }
+        }
+
+        for (const auto &hazard : waterHazards_) {
+            double entryT = 0.0;
+            if (!segmentEntryParameter(currentPosition, segmentEnd, hazard.minCorner(), hazard.maxCorner(), entryT)) {
+                continue;
+            }
+            if (entryT < hit.t - EPS) {
+                hit.type = Event::Water;
+                hit.t = entryT;
+                hit.sand = nullptr;
+                hit.water = &hazard;
+                hit.wall = nullptr;
+            }
+        }
+
+        for (const auto &wall : walls_) {
+            Vector2D intersection{0.0, 0.0};
+            if (!wall.intersectsSegment(currentPosition, segmentEnd, intersection)) {
+                continue;
+            }
+
+            const double travelRatio = (intersection - currentPosition).magnitude() / remainingDistance;
+            if (travelRatio < hit.t - EPS) {
+                hit.type = Event::Wall;
+                hit.t = travelRatio;
+                hit.sand = nullptr;
+                hit.water = nullptr;
+                hit.wall = &wall;
+            }
+        }
+
+        if (hit.type == Event::None || hit.t > 1.0) {
+            currentPosition = segmentEnd;
+            remainingDistance = 0.0;
+            break;
+        }
+
+        const double clampedT = std::clamp(hit.t, 0.0, 1.0);
+        const double travelBeforeEvent = remainingDistance * clampedT;
+        const Vector2D eventPosition = currentPosition + direction.scaled(travelBeforeEvent);
+        remainingDistance -= travelBeforeEvent;
+        currentPosition = eventPosition;
+
+        if (remainingDistance < EPS) {
+            break;
+        }
+
+        switch (hit.type) {
+        case Event::Water:
             hazardTriggered = true;
-            displacement = displacement.scaled(trap.slowdownFactor());
-            destination = start + displacement;
+            return strokeStart;
+        case Event::Sand:
+            if (hit.sand != nullptr) {
+                hazardTriggered = true;
+                remainingDistance *= hit.sand->slowdownFactor();
+            }
+            break;
+        case Event::Wall:
+            if (hit.wall != nullptr) {
+                hazardTriggered = true;
+                direction = hit.wall->reflect(direction);
+            }
+            break;
+        case Event::None:
             break;
         }
     }
 
-    for (const auto &hazard : waterHazards_) {
-
-        if (hazard.contains(destination) || hazard.intersectsSegment(start, destination)) {
-            hazardTriggered = true;
-            return start;
-        }
+    if (remainingDistance > EPS) {
+        currentPosition = currentPosition + direction.scaled(remainingDistance);
     }
 
-    if (remainingDistance(destination) < 0.4) {
-        destination = cupPosition_;
+    if ((cupPosition_ - currentPosition).magnitude() < 0.4) {
+        currentPosition = cupPosition_;
     }
 
-    return destination;
+    return currentPosition;
 }
 
 bool Hole::isInSand(const Vector2D &position) const {
@@ -84,44 +220,6 @@ bool Hole::isInWater(const Vector2D &position) const {
         }
     }
     return false;
-}
-
-bool Hole::bounceAgainstWall(const Vector2D &start, Vector2D &destination, Vector2D &displacement) const {
-    const double totalDisplacement = displacement.magnitude();
-    if (totalDisplacement <= 0.0 || walls_.empty()) {
-        return false;
-    }
-
-    const Wall *hitWall = nullptr;
-    Vector2D impactPoint{0.0, 0.0};
-    double bestDistance = std::numeric_limits<double>::infinity();
-
-    for (const auto &wall : walls_) {
-        Vector2D intersection{0.0, 0.0};
-        if (wall.intersectsSegment(start, destination, intersection)) {
-            const double distanceToImpact = (intersection - start).magnitude();
-            if (distanceToImpact < bestDistance) {
-                bestDistance = distanceToImpact;
-                impactPoint = intersection;
-                hitWall = &wall;
-            }
-        }
-    }
-
-    if (hitWall == nullptr) {
-        return false;
-    }
-
-    const double remainingDistance = std::max(0.0, totalDisplacement - bestDistance);
-    Vector2D incomingSegment = impactPoint - start;
-    if (incomingSegment.magnitude() == 0.0) {
-        incomingSegment = displacement;
-    }
-    Vector2D reflectedDirection = hitWall->reflect(incomingSegment);
-    Vector2D finalDisplacement = reflectedDirection.scaled(remainingDistance);
-    destination = impactPoint + finalDisplacement;
-    displacement = destination - start;
-    return true;
 }
 
 std::ostream &operator<<(std::ostream &os, const Hole &hole) {

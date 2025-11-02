@@ -4,8 +4,9 @@
 #include <ostream>
 
 namespace golf {
-
-    constexpr double EPSILON = 1e-6;
+    namespace {
+        constexpr double EPSILON = 1e-6;
+    }
 
     Wall::Wall(const Vector2D &start, const Vector2D &end) : start_{start}, end_{end} {}
 
@@ -51,6 +52,15 @@ namespace golf {
 
     Vector2D Wall::reflect(const Vector2D &incomingDirection) const {
         Vector2D unitIncoming = incomingDirection.normalized();
+        const Vector2D wallVector = direction();
+
+        if (std::abs(wallVector.x()) < EPSILON) {
+            return Vector2D{-unitIncoming.x(), unitIncoming.y()};
+        }
+        if (std::abs(wallVector.y()) < EPSILON) {
+            return Vector2D{unitIncoming.x(), -unitIncoming.y()};
+        }
+
         Vector2D n = normal();
         if (unitIncoming.dot(n) > 0.0) {
             n = n.scaled(-1.0);
@@ -64,5 +74,4 @@ namespace golf {
         os << "Wall(start=" << wall.start() << ", end=" << wall.end() << ")";
         return os;
     }
-
-} // namespace golf//
+}
