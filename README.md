@@ -2,9 +2,15 @@
 
 **2D Golf** este un joc de tip mini-golf în care jucătorul trebuie să introducă mingea în gaură, folosind cât mai puține lovituri.
 
-După finalizarea fiecărui nivel, jucătorul este recompensat cu un număr de stele, în funcție de performanța sa — cu cât folosește mai puține lovituri, cu atât primește mai multe stele.
+Un joc va contine mai multe gauri (nivele).
 
-Stelele pot fi folosite ulterior pentru a debloca și achiziționa modele speciale de mingi de golf.
+Am implementat 3 tipuri de obstacole
+
+-Wall : Reflecta mingea.
+
+-SandTrap : Incetineste mingea.
+
+-WaterHazard : reseteaza mingea la ultima pozitie cunoscuta
 
 # Nu primesc notă pentru că nu am pus titlu și descriere
 
