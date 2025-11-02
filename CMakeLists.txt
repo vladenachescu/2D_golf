@@ -47,11 +47,6 @@ include(cmake/CopyHelper.cmake)
 # find_package(Threads REQUIRED)
 
 
-
-set(SFML_DIR "C:/SFML-3.0.2/lib/cmake/SFML")
-
-find_package(SFML 3 REQUIRED COMPONENTS Graphics Window Audio)
-
 add_executable(${MAIN_EXECUTABLE_NAME}
         main.cpp
         heather/Vector2D.h
@@ -75,11 +70,6 @@ add_executable(${MAIN_EXECUTABLE_NAME}
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/heather)
 
 
-target_link_libraries(${MAIN_EXECUTABLE_NAME}
-        SFML::Graphics
-        SFML::Window
-        SFML::Audio
-)
 
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
