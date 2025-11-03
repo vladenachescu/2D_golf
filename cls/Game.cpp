@@ -1,52 +1,34 @@
 #include "Game.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
 
-#include <iomanip>
-#include <ostream>
-#include <utility>
+Game::Game(): scor(0) {}
 
-namespace golf {
+void Game::start() {
+    cout << "==============================\n";
+    cout << "    JOC DE GOLF 2D - POO\n";
+    cout << "==============================\n";
 
-    GolfGame::GolfGame(std::vector<Hole> holes, double friction)
-        : holes_{std::move(holes)}, players_{}, friction_{friction} {}
-
-    void GolfGame::addPlayer(const Player &player) {
-        players_.push_back(player);
+    ifstream fin("tastatura.txt");
+    if (!fin.is_open()) {
+        cerr << "Eroare: nu s-a putut deschide fisierul tastatura.txt\n";
+        return;
     }
 
-    double GolfGame::friction() const { return friction_; }
+    int n;
+    fin >> n;
+    nivele.resize(n);
 
-    void GolfGame::playRound() {
-        for (auto &player : players_) {
-            for (auto &hole : holes_) {
-                resolveHole(player, hole);
-            }
-        }
+    for (int i = 0; i < n; i++) {
+        nivele[i].incarca(fin, i + 1);
     }
 
-    void GolfGame::resolveHole(Player &player, Hole &hole) {
-        player.startHole(hole);
-        size_t safetyCounter = 0;
-        while (hole.remainingDistance(player.position()) > 0.1 && safetyCounter < 12) {
-            const double progressFactor = hole.remainingDistance(player.position()) < 3.0 ? 0.9 : 0.6;
-            const Shot shot = player.planShotToward(hole.cupPosition(), progressFactor);
-            bool hazard = false;
-            const Vector2D nextPosition = hole.simulateBallRoll(player.position(), shot, friction_, hazard);
-            player.recordShot(shot, nextPosition, hazard);
-            ++safetyCounter;
-        }
+    for (int i = 0; i < n; i++) {
+        cout << "\n=== Nivel " << i + 1 << " ===\n";
+        bool win = nivele[i].simuleaza();
+        if (win) scor++;
     }
 
-    std::ostream &operator<<(std::ostream &os, const GolfGame &game) {
-        os << std::fixed << std::setprecision(2);
-        os << "Golf game with " << game.friction() << " friction\n";
-        for (const auto &hole : game.holes_) {
-            os << hole;
-        }
-        os << "Participants:";
-        for (const auto &player : game.players_) {
-            os << '\n' << player;
-        }
-        return os;
-    }
-
+    cout << "\n=== Joc terminat! Scor final: " << scor << "/" << n << " ===\n";
 }

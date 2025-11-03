@@ -51,20 +51,22 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         main.cpp
         heather/Vector2D.h
         cls/Vector2D.cpp
-        heather/Shot.h
-        cls/Shot.cpp
+        cls/Ball.cpp
+        heather/Ball.h
+        cls/Hole.cpp
         heather/Hole.h
+        heather/Obstacle.h
+        cls/Obstacle.cpp
         heather/Wall.h
         cls/Wall.cpp
-        heather/WaterHazard.h
-        heather/SandTrap.h
-        cls/WaterHazard.cpp
-        cls/SandTrap.cpp
-        cls/Hole.cpp
-        heather/Player.h
-        cls/Player.cpp
-        cls/Game.cpp
+        heather/Water.h
+        cls/Water.cpp
+        heather/Sand.h
+        cls/Sand.cpp
+        heather/Level.h
+        cls/Level.cpp
         heather/Game.h
+        cls/Game.cpp
 )
 
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/heather)

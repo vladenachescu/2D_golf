@@ -1,9 +1,9 @@
 #pragma once
 #include "Obstacle.h"
 
-class Wall : public Obstacle {
+class Sand : public Obstacle {
 public:
-    Wall(float xmin, float xmax, float ymin, float ymax);
+    Sand(float xmin, float xmax, float ymin, float ymax);
     void interact(Ball& b, const Vector2D& prev) override;
     string tip() const override;
 };

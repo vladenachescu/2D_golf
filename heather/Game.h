@@ -1,30 +1,13 @@
 #pragma once
-
-#include "Hole.h"
-#include "Player.h"
-
+#include "Level.h"
 #include <vector>
+using namespace std;
 
-namespace golf {
-
-    class GolfGame {
-    public:
-        GolfGame(std::vector<Hole> holes, double friction);
-
-        void addPlayer(const Player &player);
-        void playRound();
-        double friction() const;
-
-    private:
-        friend std::ostream &operator<<(std::ostream &os, const GolfGame &game);
-
-        void resolveHole(Player &player, Hole &hole);
-
-        std::vector<Hole> holes_;
-        std::vector<Player> players_;
-        double friction_;
-    };
-
-    std::ostream &operator<<(std::ostream &os, const GolfGame &game);
-
-}
+class Game {
+private:
+    vector<Level> nivele;
+    int scor;
+public:
+    Game();
+    void start();
+};
