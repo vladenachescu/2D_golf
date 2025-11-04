@@ -1,13 +1,14 @@
 #include "Ball.h"
-#define M_PI 3.14159265358979323846
 #include <cmath>
+#define M_P 3.14159265358979323846
+
 constexpr float EPS = 1e-3f;
 
 Ball::Ball(): pozitie(0,0), viteza(0,0), ultimaPozitie(0,0), raza(0.2f) {}
 Ball::Ball(const Vector2D& p, float r): pozitie(p), viteza(0,0), ultimaPozitie(p), raza(r) {}
 
 void Ball::loveste(float forta, float unghi) {
-    float rad = unghi * M_PI / 180.0f;
+    float rad = unghi * M_P / 180.0f;
     viteza = {cos(rad) * forta, sin(rad) * forta};
     ultimaPozitie = pozitie;
 }
