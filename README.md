@@ -4,13 +4,24 @@
 
 Un joc va contine mai multe gauri (nivele).
 
-Am implementat 3 tipuri de obstacole
+Am implementat 5 tipuri de obstacole
 
 -Wall : Reflecta mingea.
 
 -SandTrap : Incetineste mingea.
 
--WaterHazard : reseteaza mingea la ultima pozitie cunoscuta
+-WaterHazard : reseteaza mingea la ultima pozitie dinaintea loviturii
+
+-BlackHole se comportă ca o gaura neagra:
+  daca mingea ajunge prea aproape, incepe să fie trasa spre ea.
+  Cu cat se apropie mai mult, cu atat este atrasa mai tare.
+  Daca mingea ajunge prea aproape de centrul gaurii negre, este absorbita complet si dispare de pe teren.
+  Dupa csteva momente, ea va reaparea în alta parte, fiind „scuipata” de o WhiteHole
+
+-WhiteHole este opusul unei gauri negre.
+Ea respinge mingea care ajunge în apropiere, ampingand-o înapoi și încetinind-o.
+
+Mingea care a fost „mancata” de un BlackHole va aparea langa un WhiteHole, la un punct random din apropierea razei de repulsie,arunca afara cu o mica viteza.
 
 # Nu primesc notă pentru că nu am pus titlu și descriere
 
