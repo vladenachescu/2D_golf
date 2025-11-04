@@ -1,5 +1,8 @@
 #include "Level.h"
 #include <iostream>
+#include <fstream>
+#include <Wall.h>
+#include <Sand.h>
 using namespace std;
 
 void Level::incarca(ifstream& fin, int nrNivel) {
