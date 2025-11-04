@@ -6,7 +6,7 @@ private:
     Vector2D pozitie;
     Vector2D viteza;
     Vector2D ultimaPozitie;
-    [[maybe_unused]] float raza;
+    float raza;
 public:
     Ball();
     Ball(const Vector2D& p, float r=0.2f);

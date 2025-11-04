@@ -1,7 +1,9 @@
 #pragma once
 #include "Ball.h"
 #include "Hole.h"
+#include "Wall.h"
 #include "Water.h"
+#include "Sand.h"
 #include <vector>
 #include <memory>
 using namespace std;
@@ -11,8 +13,7 @@ private:
     Ball minge;
     Hole gaura;
     vector<shared_ptr<Obstacle>> obstacole;
-    vector<pair<float,float>> lovituriData;
 public:
-    void incarca(ifstream& fin, int nrNivel);
+    void incarca(int nrNivel);
     bool simuleaza();
 };

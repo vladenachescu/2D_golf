@@ -2,6 +2,7 @@
 #include "Vector2D.h"
 #include "Ball.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
 class Obstacle {
