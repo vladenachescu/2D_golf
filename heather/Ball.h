@@ -9,7 +9,8 @@ private:
     [[maybe_unused]] float raza;
 public:
     Ball();
-    Ball(const Vector2D& p, float r=0.2f);
+
+    explicit Ball(const Vector2D& p, float r=0.2f);
     void loveste(float forta, float unghi);
     void actualizeazaPozitia(float dt);
     void incetineste(float factor);

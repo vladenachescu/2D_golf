@@ -8,7 +8,7 @@ class Vector2D {
 private:
     float x, y;
 public:
-    Vector2D(float x=0, float y=0);
+    explicit Vector2D(float x=0, float y=0);
     float getX() const;
     float getY() const;
     float dist(const Vector2D& o) const;

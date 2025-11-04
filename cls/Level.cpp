@@ -41,7 +41,7 @@ bool Level::simuleaza() {
         for (int t=0; t<300; t++) {
             Vector2D prev = minge.getPoz();
             minge.actualizeazaPozitia(0.1f);
-            for (auto& o : obstacole)
+            for (const auto& o : obstacole)
                 o->interact(minge, prev);
             if (gaura.contine(minge.getPoz())) {
                 cout << ">> Minge in gaura dupa " << lovituri << " lovituri!\n";
