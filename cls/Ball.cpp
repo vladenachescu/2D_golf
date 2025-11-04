@@ -13,8 +13,8 @@ Ball::Ball()
 Ball::Ball(const Vector2D& p, float r)
     : pozitie(p), viteza(0,0), ultimaPozitie(p), raza(r) {}
 
-void Ball::loveste(float forta, float unghi) {
-    float rad = unghi * M_P / 180.0f;
+void Ball::loveste(float forta, const float unghi) {
+    float rad = M_P * unghi / 180.0f;
     viteza = Vector2D(cos(rad) * forta, sin(rad) * forta);
     ultimaPozitie = pozitie;
 }
@@ -29,7 +29,7 @@ void Ball::reflectaX() { viteza = Vector2D(-viteza.getX(), viteza.getY()); }
 void Ball::reflectaY() { viteza = Vector2D(viteza.getX(), -viteza.getY()); }
 void Ball::reseteaza() { pozitie = ultimaPozitie; viteza = Vector2D(0,0); }
 const Vector2D& Ball::getPoz() const { return pozitie; }
-const Vector2D& Ball::getUltimaPoz() const { return ultimaPozitie; }
+[[maybe_unused]] const Vector2D& Ball::getUltimaPoz() const { return ultimaPozitie; }
 bool Ball::vitezaMica() const { return fabs(viteza.getX()) < EPS && fabs(viteza.getY()) < EPS; }
 ostream& operator<<(ostream& os, const Ball& b) {
     os << "Pozitie minge: " << b.pozitie;
