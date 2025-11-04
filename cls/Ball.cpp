@@ -29,7 +29,6 @@ void Ball::reflectaX() { viteza = Vector2D(-viteza.getX(), viteza.getY()); }
 void Ball::reflectaY() { viteza = Vector2D(viteza.getX(), -viteza.getY()); }
 void Ball::reseteaza() { pozitie = ultimaPozitie; viteza = Vector2D(0,0); }
 const Vector2D& Ball::getPoz() const { return pozitie; }
-[[maybe_unused]] const Vector2D& Ball::getUltimaPoz() const { return ultimaPozitie; }
 bool Ball::vitezaMica() const { return fabs(viteza.getX()) < EPS && fabs(viteza.getY()) < EPS; }
 ostream& operator<<(ostream& os, const Ball& b) {
     os << "Pozitie minge: " << b.pozitie;
