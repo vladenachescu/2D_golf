@@ -32,23 +32,27 @@ void Level::incarca(int nrNivel, std::istream& in) {
 
     for (int i = 0; i < nrObs; i++) {
         std::string tip;
-        std::cout << "  Obstacol " << i+1 << " (tip si parametri): ";
+        std::cout << "  Obstacol " << i+1 << " (tip WALL/WATER/SAND/BLACK_HOLE/WHITE_HOLE): ";
         in >> tip;
         if (tip == "WALL") {
             float xmin, xmax, ymin, ymax;
-            in >> xmin >> xmax >> ymin >> ymax;
+            std::cout << "\n xmin, ymin, xmax, ymax: ";
+            in >> xmin >> ymin >> xmax >> ymax;
             obstacole.push_back(std::make_shared<Wall>(xmin, xmax, ymin, ymax));
         } else if (tip == "WATER") {
             float xmin, xmax, ymin, ymax;
-            in >> xmin >> xmax >> ymin >> ymax;
+            std::cout << "\n xmin, ymin, xmax, ymax: ";
+            in >> xmin >> ymin >> xmax >> ymax;
             obstacole.push_back(std::make_shared<Water>(xmin, xmax, ymin, ymax));
         } else if (tip == "SAND") {
             float xmin, xmax, ymin, ymax;
-            in >> xmin >> xmax >> ymin >> ymax;
+            std::cout << "\n xmin, ymin, xmax, ymax: ";
+            in >> xmin >> ymin >> xmax >> ymax;
             obstacole.push_back(std::make_shared<Sand>(xmin, xmax, ymin, ymax));
         } else if (tip == "BLACK_HOLE" || tip == "BLACKHOLE") {
             float cx, cy, razaInfluenta, razaAbsorbtie;
             int pairId;
+            std::cout << "\n cx, cy , razaInfluenta, razaAbsorbtie , pairId: ";
             in >> cx >> cy >> razaInfluenta >> razaAbsorbtie >> pairId;
             auto gh = std::make_shared<BlackHole>(Vector2D(cx, cy), razaInfluenta, razaAbsorbtie);
             obstacole.push_back(gh);
@@ -57,6 +61,7 @@ void Level::incarca(int nrNivel, std::istream& in) {
             float cx, cy, razaRepulsie;
             int pairId;
             in >> cx >> cy >> razaRepulsie >> pairId;
+            std::cout<< "\n cx, cy , razaRepulsie, pairId : ";
             auto wh = std::make_shared<WhiteHole>(Vector2D(cx, cy), razaRepulsie);
             obstacole.push_back(wh);
             gauriAlbe[pairId] = wh;
