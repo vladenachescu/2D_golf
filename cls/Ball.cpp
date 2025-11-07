@@ -45,7 +45,6 @@ void Ball::adaugaViteza(const Vector2D& delta) {
     viteza = viteza + delta;
 }
 const Vector2D& Ball::getPoz() const { return pozitie; }
-const Vector2D& Ball::getUltimaPoz() const { return ultimaPozitie; }
 bool Ball::vitezaMica() const { return std::fabs(viteza.getX()) < kEps && std::fabs(viteza.getY()) < kEps; }
 std::ostream& operator<<(std::ostream& os, const Ball& b) {
     os << "Pozitie minge: " << b.pozitie;
