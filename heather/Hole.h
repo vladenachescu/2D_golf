@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector2D.h"
-
+using namespace std;
 class Hole {
 private:
     Vector2D poz;
