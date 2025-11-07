@@ -34,7 +34,7 @@ bool Level::simuleaza() {
     int lovituri = 0;
     while (true) {
         float unghi, forta;
-        std::cout << "\n[Lovitura " << ++lovituri << "] Unghi si forta (grade, valoare) sau -1 pentru iesire: ";
+        std::cout << "\n[Lovitura " << ++lovituri << "] Unghi si forta (grade, valoare*5) sau -1 pentru iesire: ";
         if (unghi == -1 && forta == -1) return false;
         minge.loveste(forta, unghi);
         for (int t=0; t<300; t++) {

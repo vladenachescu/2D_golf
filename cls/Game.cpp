@@ -17,7 +17,7 @@ void Game::start() {
     for (int i = 0; i < n; i++) {
         cout << "\n=== Nivel " << i+1 << " ===\n";
         bool win = nivele[i].simuleaza();
-        if (win) scor++;
+        if (win) scor=scor+1;
     }
     cout << "\n=== Joc terminat! Scor final: " << scor << "/" << n << " ===\n";
 }

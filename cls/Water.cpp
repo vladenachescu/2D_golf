@@ -1,6 +1,6 @@
 #include "Water.h"
 #include <iostream>
-using namespace std;
+
 
 Water::Water(float xmin, float xmax, float ymin, float ymax)
     : Obstacle(xmin, xmax, ymin, ymax) {}
