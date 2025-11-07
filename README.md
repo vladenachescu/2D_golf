@@ -8,9 +8,9 @@ Am implementat 5 tipuri de obstacole
 
 -Wall : Reflecta mingea.
 
--SandTrap : Incetineste mingea.
+-Sand : Incetineste mingea.
 
--WaterHazard : reseteaza mingea la ultima pozitie dinaintea loviturii
+-Water : reseteaza mingea la ultima pozitie dinaintea loviturii
 
 -BlackHole se comportă ca o gaura neagra:
   daca mingea ajunge prea aproape, incepe să fie trasa spre ea.
