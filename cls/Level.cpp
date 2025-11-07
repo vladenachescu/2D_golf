@@ -30,7 +30,8 @@ bool Level::simuleaza(istream& in) {
     cout << "\n--- START NIVEL ---\n";
     cout << gaura << "\n";
     cout << "Obstacole:\n";
-    for (const auto& o : obstacole) cout << "  - " << *o << "\n";
+    for (const
+        auto& o : obstacole) cout << "  - " << *o << "\n";
     int lovituri = 0;
     while (true) {
         float unghi, forta;
