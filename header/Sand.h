@@ -4,6 +4,6 @@
 class Sand : public Obstacle {
 public:
     Sand(float xmin, float xmax, float ymin, float ymax);
-    void interact(Ball& b, const Vector2D& prev) override;
-    string tip() const override;
+    void interact(Ball& b, const Vector2D& prev, float dt) override;
+    std::string tip() const override;
 };

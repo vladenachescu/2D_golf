@@ -9,5 +9,5 @@ public:
     explicit Hole(Vector2D p = Vector2D(10,0), float r=0.5f);
     bool contine(const Vector2D& v) const;
     const Vector2D& getPoz() const;
-    friend ostream& operator<<(ostream& os, const Hole& h);
+    friend std::ostream& operator<<(std::ostream& os, const Hole& h);
 };

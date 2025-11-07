@@ -1,11 +1,11 @@
 #include "Wall.h"
 #include <iostream>
-using namespace std;
+
 
 Wall::Wall(float xmin, float xmax, float ymin, float ymax)
     : Obstacle(xmin, xmax, ymin, ymax) {}
 
-void Wall::interact(Ball& b, const Vector2D&) {
+void Wall::interact(Ball& b, const Vector2D&, float) {
     if (intersecteaza(b.getPoz())) {
         b.reflectaX();
         b.reflectaY();
@@ -13,4 +13,4 @@ void Wall::interact(Ball& b, const Vector2D&) {
     }
 }
 
-string Wall::tip() const { return "Perete"; }
+std::string Wall::tip() const { return "Perete"; }

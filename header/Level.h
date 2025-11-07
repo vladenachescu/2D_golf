@@ -1,0 +1,28 @@
+#pragma once
+#include "Ball.h"
+#include "Hole.h"
+#include "Wall.h"
+#include "Water.h"
+#include "Sand.h"
+#include <vector>
+#include <memory>
+#include <iostream>
+#include "BlackHole.h"
+#include "WhiteHole.h"
+#include <istream>
+
+class Level {
+private:
+    Ball minge;
+    Hole gaura;
+    std::vector<std::shared_ptr<Obstacle>> obstacole;
+
+public:
+    Level() = default;
+    Level(const Ball& minge, const Hole& gaura, std::vector<std::shared_ptr<Obstacle>> obstacole);
+
+    void incarca(int nrNivel, std::istream& in);
+    bool simuleaza(std::istream& in);
+
+    friend std::ostream& operator<<(std::ostream& os, const Level& level);
+};

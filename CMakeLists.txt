@@ -49,27 +49,31 @@ include(cmake/CopyHelper.cmake)
 
 add_executable(${MAIN_EXECUTABLE_NAME}
         main.cpp
-        heather/Vector2D.h
+        header/Vector2D.h
         cls/Vector2D.cpp
         cls/Ball.cpp
-        heather/Ball.h
+        header/Ball.h
         cls/Hole.cpp
-        heather/Hole.h
-        heather/Obstacle.h
+        header/Hole.h
+        header/Obstacle.h
         cls/Obstacle.cpp
-        heather/Wall.h
+        header/Wall.h
         cls/Wall.cpp
-        heather/Water.h
+        header/Water.h
         cls/Water.cpp
-        heather/Sand.h
+        header/Sand.h
         cls/Sand.cpp
-        heather/Level.h
+        header/Level.h
         cls/Level.cpp
-        heather/Game.h
+        header/Game.h
         cls/Game.cpp
+        header/BlackHole.h
+        header/WhiteHole.h
+        cls/BlackHole.cpp
+        cls/WhileHole.cpp
 )
 
-target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/heather)
+target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/header)
 
 
 

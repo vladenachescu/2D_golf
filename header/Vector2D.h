@@ -12,7 +12,11 @@ public:
     float getX() const;
     float getY() const;
     float dist(const Vector2D& o) const;
+    float lungime() const;
+    Vector2D normalizat() const;
     Vector2D operator+(const Vector2D& o) const;
+    Vector2D operator-(const Vector2D& o) const;
     Vector2D operator*(float s) const;
-    friend ostream& operator<<(ostream& os, const Vector2D& v);
+    Vector2D operator/(float s) const;
+    friend std::ostream& operator<<(std::ostream& os, const Vector2D& v);
 };

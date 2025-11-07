@@ -1,15 +1,15 @@
 #include "Water.h"
 #include <iostream>
-using namespace std;
+
 
 Water::Water(float xmin, float xmax, float ymin, float ymax)
     : Obstacle(xmin, xmax, ymin, ymax) {}
 
-void Water::interact(Ball& b, const Vector2D& prev) {
+void Water::interact(Ball& b, const Vector2D& prev, float) {
     if (intersecteazaLinie(prev, b.getPoz())) {
         std::cout << ">> Minge a trecut peste apa! Resetare pozitie...\n";
         b.reseteaza();
     }
 }
 
-string Water::tip() const { return "Apa"; }
+std::string Water::tip() const { return "Apa"; }
