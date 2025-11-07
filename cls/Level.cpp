@@ -1,19 +1,18 @@
 #include "Level.h"
 #include <iostream>
-using namespace std;
 
 void Level::incarca(int nrNivel, istream& in) {
-    cout << "\n=== Configurare nivel " << nrNivel << " ===\n";
+    std::cout << "\n=== Configurare nivel " << nrNivel << " ===\n";
     float bx, by;
-    cout << "Pozitie start minge (x y): ";
+    std::cout << "Pozitie start minge (x y): ";
     in >> bx >> by;
     minge = Ball(Vector2D(bx, by));
     float hx, hy, hr;
-    cout << "Pozitie si raza gaura (x y r): ";
+    std::cout << "Pozitie si raza gaura (x y r): ";
     in >> hx >> hy >> hr;
     gaura = Hole(Vector2D(hx, hy), hr);
     int nrObs;
-    cout << "Numar obstacole: ";
+    std::cout << "Numar obstacole: ";
     in >> nrObs;
     obstacole.clear();
     for (int i = 0; i < nrObs; i++) {
@@ -27,15 +26,15 @@ void Level::incarca(int nrNivel, istream& in) {
 }
 
 bool Level::simuleaza(istream& in) {
-    cout << "\n--- START NIVEL ---\n";
-    cout << gaura << "\n";
-    cout << "Obstacole:\n";
+    std::cout << "\n--- START NIVEL ---\n";
+    std::cout << gaura << "\n";
+    std::cout << "Obstacole:\n";
     for (const
         auto& o : obstacole) cout << "  - " << *o << "\n";
     int lovituri = 0;
     while (true) {
         float unghi, forta;
-        cout << "\n[Lovitura " << ++lovituri << "] Unghi si forta (grade, valoare) sau -1 pentru iesire: ";
+        std::cout << "\n[Lovitura " << ++lovituri << "] Unghi si forta (grade, valoare) sau -1 pentru iesire: ";
         if (!(in >> unghi >> forta)) return false;
         if (unghi == -1 && forta == -1) return false;
         minge.loveste(forta, unghi);
@@ -45,11 +44,11 @@ bool Level::simuleaza(istream& in) {
             for (const auto& o : obstacole)
                 o->interact(minge, prev);
             if (gaura.contine(minge.getPoz())) {
-                cout << ">> Minge in gaura dupa " << lovituri << " lovituri!\n";
+                std::cout << ">> Minge in gaura dupa " << lovituri << " lovituri!\n";
                 return true;
             }
             if (minge.vitezaMica()) break;
         }
-        cout << minge << "\n";
+        std::cout << minge << "\n";
     }
 }

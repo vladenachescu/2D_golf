@@ -7,7 +7,7 @@ Water::Water(float xmin, float xmax, float ymin, float ymax)
 
 void Water::interact(Ball& b, const Vector2D& prev) {
     if (intersecteazaLinie(prev, b.getPoz())) {
-        cout << ">> Minge a trecut peste apa! Resetare pozitie...\n";
+        std::cout << ">> Minge a trecut peste apa! Resetare pozitie...\n";
         b.reseteaza();
     }
 }

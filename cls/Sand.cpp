@@ -8,7 +8,7 @@ Sand::Sand(float xmin, float xmax, float ymin, float ymax)
 void Sand::interact(Ball& b, const Vector2D&) {
     if (intersecteaza(b.getPoz())) {
         b.incetineste(0.8f);
-        cout << ">> Minge pe nisip! Viteza redusa.\n";
+        std::cout << ">> Minge pe nisip! Viteza redusa.\n";
     }
 }
 

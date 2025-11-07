@@ -9,7 +9,7 @@ void Wall::interact(Ball& b, const Vector2D&) {
     if (intersecteaza(b.getPoz())) {
         b.reflectaX();
         b.reflectaY();
-        cout << ">> Loveste peretele!\n";
+        std::cout << ">> Loveste peretele!\n";
     }
 }
 
