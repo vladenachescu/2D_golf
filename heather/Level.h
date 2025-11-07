@@ -6,7 +6,7 @@
 #include "Sand.h"
 #include <vector>
 #include <memory>
-#include <fstream>
+#include <iostream>
 using namespace std;
 
 class Level {
@@ -14,6 +14,7 @@ private:
     Ball minge;
     Hole gaura;
     vector<shared_ptr<Obstacle>> obstacole;
+
 public:
     void incarca(int nrNivel, istream& in);
     bool simuleaza(istream& in);
