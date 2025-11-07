@@ -1,6 +1,6 @@
 #include "Level.h"
 #include <iostream>
-
+using namespace std;
 void Level::incarca(int nrNivel) {
     std::cout << "\n=== Configurare nivel " << nrNivel << " ===\n";
     float bx, by;

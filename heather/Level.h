@@ -6,7 +6,7 @@
 #include "Sand.h"
 #include <vector>
 #include <memory>
-
+using namespace std;
 
 
 class Level {

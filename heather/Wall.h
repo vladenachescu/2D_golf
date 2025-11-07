@@ -1,6 +1,6 @@
 #pragma once
 #include "Obstacle.h"
-
+using namespace std;
 class Wall : public Obstacle {
 public:
     Wall(float xmin, float xmax, float ymin, float ymax);
