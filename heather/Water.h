@@ -1,6 +1,6 @@
 #pragma once
 #include "Obstacle.h"
-using namespace std;
+
 class Water : public Obstacle {
 public:
     Water(float xmin, float xmax, float ymin, float ymax);

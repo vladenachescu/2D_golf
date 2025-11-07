@@ -6,8 +6,8 @@
 #include "Sand.h"
 #include <vector>
 #include <memory>
+#include <fstream>
 using namespace std;
-
 
 class Level {
 private:
@@ -15,6 +15,6 @@ private:
     Hole gaura;
     vector<shared_ptr<Obstacle>> obstacole;
 public:
-    void incarca(int nrNivel);
-    bool simuleaza();
+    void incarca(int nrNivel, istream& in);
+    bool simuleaza(istream& in);
 };

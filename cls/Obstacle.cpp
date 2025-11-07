@@ -1,6 +1,6 @@
 #include "Obstacle.h"
 #include <algorithm>
-using namespace std;
+
 Obstacle::Obstacle(float xmin, float xmax, float ymin, float ymax)
     : xmin(xmin), xmax(xmax), ymin(ymin), ymax(ymax) {}
 

@@ -4,7 +4,7 @@
 #ifndef M_P
 #define M_P 3.14159265358979323846
 #endif
-using namespace std;
+
 constexpr float EPS = 1e-3f;
 
 Ball::Ball()
