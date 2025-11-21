@@ -69,10 +69,6 @@ void Game::adaugaNivel(const Level& nivel) {
     nrNivele++;
 }
 
-void Game::reseteazaJoc() {
-    scor = 0;
-    std::cout << "Joc resetat. Scorul este acum 0.\n";
-}
 
 void Game::afiseazaScorFinal() const {
     std::cout << "Scor final: " << scor << "/" << nrNivele << "\n";
