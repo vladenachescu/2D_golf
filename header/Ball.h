@@ -23,8 +23,8 @@ public:
     void aplicaAcceleratie(const Vector2D& acceleratie, float dt);
     void seteazaPozitia(const Vector2D& p);
     void adaugaViteza(const Vector2D& delta);
-    const Vector2D& getPoz() const;
-    const Vector2D& getUltimaPoz() const;
-    bool vitezaMica() const;
+    [[nodiscard]] const Vector2D& getPoz() const;
+    [[nodiscard]] const Vector2D& getUltimaPoz() const;
+    [[nodiscard]] bool vitezaMica() const;
     friend std::ostream& operator<<(std::ostream& os, const Ball& b);
 };

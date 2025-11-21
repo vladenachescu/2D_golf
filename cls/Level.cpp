@@ -6,6 +6,12 @@
 #include <utility>
 #include <algorithm>
 
+// Aceste include-uri sunt necesare pentru dynamic_cast si logica din incarca
+#include <ranges>
+
+#include "BlackHole.h"
+#include "WhiteHole.h"
+
 Level::Level(const Ball& mingeInit, const Hole& gauraInit, std::vector<std::shared_ptr<Obstacle>> obstacoleInit)
     : minge(mingeInit), gaura(gauraInit), obstacole(std::move(obstacoleInit)) {}
 
@@ -69,6 +75,8 @@ void Level::incarca(int nrNivel, std::istream& in) {
             std::cerr << "Tip de obstacol necunoscut: " << tip << "\n";
         }
     }
+
+    // Legare gauri negre de albe
     for (const auto& [id, gh] : gauriNegre) {
         auto it = gauriAlbe.find(id);
         if (it != gauriAlbe.end()) {
@@ -76,18 +84,22 @@ void Level::incarca(int nrNivel, std::istream& in) {
             it->second->seteazaSursa(gh);
         }
     }
-    for (const auto& [id, gh] : gauriNegre) {
-        if (gauriAlbe.find(id) == gauriAlbe.end()) {
+
+    // Verificari erori configuratie
+    for (const auto &id: gauriNegre | views::keys) {
+        if (!gauriAlbe.contains(id)) {
             std::cout << "Atentie: gaura neagra cu ID " << id
                       << " nu are gaura alba pereche in configuratie.\n";
         }
     }
-    for (const auto& [id, wh] : gauriAlbe) {
-        if (gauriNegre.find(id) == gauriNegre.end()) {
+    for (const auto &id: gauriAlbe | views::keys) {
+        if (!gauriNegre.contains(id)) {
             std::cout << "Atentie: gaura alba cu ID " << id
                       << " nu are gaura neagra pereche in configuratie.\n";
         }
     }
+
+    // Ajustare pozitie initiala daca e prea aproape de White Hole
     Vector2D pozInitiala(xStart, yStart);
     bool ajustata = false;
     for (const auto& wh : listaGauriAlbe) {
@@ -113,6 +125,7 @@ bool Level::simuleaza(std::istream& in) {
     std::cout << "\n--- START NIVEL ---\n";
     std::cout << gaura << "\n";
     std::cout << "Obstacole:\n";
+
     bool areGauriWormhole = false;
     for (const auto& o : obstacole) {
         if (!areGauriWormhole &&
@@ -125,6 +138,7 @@ bool Level::simuleaza(std::istream& in) {
     if (areGauriWormhole) {
         std::cout << "Nota: fiecare Gaura Neagra trebuie sa aiba o Gaura Alba cu acelasi ID pentru a functiona corect.\n";
     }
+
     int lovituri = 0;
 
     while (true) {
@@ -134,8 +148,10 @@ bool Level::simuleaza(std::istream& in) {
         if (unghi == -1 && forta == -1) return false;
 
         minge.loveste(forta, unghi);
-        const float dt = 0.1f;
+
+        // Bucla fizica
         for (int t = 0; t < 300; t++) {
+            constexpr float dt = 0.1f;
             Vector2D prev = minge.getPoz();
             minge.actualizeazaPozitia(dt);
 
@@ -152,8 +168,5 @@ bool Level::simuleaza(std::istream& in) {
         std::cout << minge << "\n";
     }
 }
-std::ostream& operator<<(std::ostream& os, const Level& level) {
-    os << "Level cu gaura " << level.gaura << " si " << level.obstacole.size()
-       << " obstacole";
-    return os;
-}
+
+// MODIFIC
