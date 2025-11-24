@@ -61,14 +61,15 @@ void Level::incarca(int nrNivel, std::istream& in) {
         } else if (tip == "BLACK_HOLE" || tip == "BLACKHOLE" || tip == "WHITE_HOLE" || tip == "WHITEWHOLE") {
             pairId = i;
             float cx, cy, razaInfluenta, razaAbsorbtie;
-            std::cout<< "cx, cy, razaInfluenta, razaAbsorbtie";
+            std::cout<< "cx, cy, razaInfluenta, razaAbsorbtie \n";
             in >> cx >> cy >> razaInfluenta >> razaAbsorbtie;
             auto gh = std::make_shared<BlackHole>(Vector2D(cx, cy), razaInfluenta, razaAbsorbtie, pairId);
             obstacole.push_back(gh);
             gauriNegre[pairId] = gh;
+            std::cout<< "daca ai una trebuie sa o ai si pe cealalata!\n\n";
             std::cout<< "cx cy razaRepulsie";
             float razaRepulsie;
-            in >> cx >> cy >> razaInfluenta >> razaAbsorbtie;
+            in >> cx >> cy >> razaRepulsie;
             auto wh = std::make_shared<WhiteHole>(Vector2D(cx, cy), razaRepulsie, pairId);
             obstacole.push_back(wh);
             gauriAlbe[pairId] = wh;
@@ -128,9 +129,6 @@ bool Level::simuleaza(std::istream& in) {
             areGauriWormhole = true;
              }
         std::cout << "  - " << *o << "\n";
-    }
-    if (areGauriWormhole) {
-        std::cout << "Nota: fiecare Gaura Neagra trebuie sa aiba o Gaura Alba cu acelasi ID pentru a functiona corect.\n";
     }
 
     int lovituri = 0;
