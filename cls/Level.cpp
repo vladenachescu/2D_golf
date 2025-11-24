@@ -36,42 +36,44 @@ void Level::incarca(int nrNivel, std::istream& in) {
     std::vector<std::shared_ptr<WhiteHole>> listaGauriAlbe;
 
     for (int i = 0; i < nrObs; i++) {
+        int pairId=0;
         std::string tip;
         std::cout << "  Obstacol " << i+1 << " (tip [WALL/WATER/SAND/BLACK_HOLE/WHITE_HOLE] si parametri): ";
         in >> tip;
         if (tip == "WALL") {
             float xmin, xmax, ymin, ymax;
-            std::cout<< "xmin,xmax,yman,ymax: ";
+            std::cout<< "xmin xmax yman ymax: ";
             in >> xmin >> xmax >> ymin >> ymax;
             obstacole.push_back(std::make_shared<Wall>(xmin, xmax, ymin, ymax));
         } else if (tip == "WATER") {
             float xmin, xmax, ymin, ymax;
-            std::cout<< "xmin,xmax,yman,ymax: ";
+            std::cout<< "xmin xmax yman ymax: ";
             in >> xmin >> xmax >> ymin >> ymax;
             obstacole.push_back(std::make_shared<Water>(xmin, xmax, ymin, ymax));
         } else if (tip == "SAND") {
             float xmin, xmax, ymin, ymax;
-            std::cout<< "xmin,xmax,yman,ymax: ";
+            std::cout<< "xmin xmax yman ymax: ";
             in >> xmin >> xmax >> ymin >> ymax;
             obstacole.push_back(std::make_shared<Sand>(xmin, xmax, ymin, ymax));
-        } else if (tip == "BLACK_HOLE" || tip == "BLACKHOLE") {
+
+        } else if (tip == "BLACK_HOLE" || tip == "BLACKHOLE" || tip == "WHITE_HOLE" || tip == "WHITEWHOLE") {
             float cx, cy, razaInfluenta, razaAbsorbtie;
-            int pairId;
-            std::cout<< "cx, cy, razaInfluenta, razaAbsorbtie, ID pereche (WHILE HOLE): ";
-            in >> cx >> cy >> razaInfluenta >> razaAbsorbtie >> pairId;
+            std::cout<< "cx, cy, razaInfluenta, razaAbsorbtie";
+            in >> cx >> cy >> razaInfluenta >> razaAbsorbtie;
             auto gh = std::make_shared<BlackHole>(Vector2D(cx, cy), razaInfluenta, razaAbsorbtie, pairId);
             obstacole.push_back(gh);
             gauriNegre[pairId] = gh;
-        } else if (tip == "WHITE_HOLE" || tip == "WHITEHOLE") {
-            float cx, cy, razaRepulsie;
-            int pairId;
-            std::cout<< "cx, cy, razaInfluenta, razaAbsorbtie, ID pereche (BLACK HOLE): ";
-            in >> cx >> cy >> razaRepulsie >> pairId;
+            std::cout<< "cx cy razaRepulsie";
+            float razaRepulsie;
+            in >> cx >> cy >> razaInfluenta >> razaAbsorbtie;
             auto wh = std::make_shared<WhiteHole>(Vector2D(cx, cy), razaRepulsie, pairId);
             obstacole.push_back(wh);
             gauriAlbe[pairId] = wh;
             listaGauriAlbe.push_back(wh);
-        } else {
+            pairId++;
+        }
+
+         else {
             std::cerr << "Tip de obstacol necunoscut: " << tip << "\n";
         }
     }
@@ -85,19 +87,7 @@ void Level::incarca(int nrNivel, std::istream& in) {
         }
     }
 
-    // Verificari erori configuratie
-    for (const auto &id: gauriNegre | views::keys) {
-        if (!gauriAlbe.contains(id)) {
-            std::cout << "Atentie: gaura neagra cu ID " << id
-                      << " nu are gaura alba pereche in configuratie.\n";
-        }
-    }
-    for (const auto &id: gauriAlbe | views::keys) {
-        if (!gauriNegre.contains(id)) {
-            std::cout << "Atentie: gaura alba cu ID " << id
-                      << " nu are gaura neagra pereche in configuratie.\n";
-        }
-    }
+
 
     // Ajustare pozitie initiala daca e prea aproape de White Hole
     Vector2D pozInitiala(xStart, yStart);
@@ -168,5 +158,3 @@ bool Level::simuleaza(std::istream& in) {
         std::cout << minge << "\n";
     }
 }
-
-// MODIFIC
