@@ -35,8 +35,10 @@ void Level::incarca(int nrNivel, std::istream& in) {
     std::unordered_map<int, std::shared_ptr<WhiteHole>> gauriAlbe;
     std::vector<std::shared_ptr<WhiteHole>> listaGauriAlbe;
 
+    int pairId;
+
     for (int i = 0; i < nrObs; i++) {
-        int pairId=0;
+        pairId = i;
         std::string tip;
         std::cout << "  Obstacol " << i+1 << " (tip [WALL/WATER/SAND/BLACK_HOLE/WHITE_HOLE] si parametri): ";
         in >> tip;
@@ -70,7 +72,7 @@ void Level::incarca(int nrNivel, std::istream& in) {
             obstacole.push_back(wh);
             gauriAlbe[pairId] = wh;
             listaGauriAlbe.push_back(wh);
-            pairId++;
+
         }
 
          else {
