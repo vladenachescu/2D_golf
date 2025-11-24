@@ -29,5 +29,4 @@ public:
     void reseteazaMinge();
     Ball& getMinge(); // Returnam referinta ca sa o putem modifica in teste
 
-    friend std::ostream& operator<<(std::ostream& os, const Level& level);
 };
