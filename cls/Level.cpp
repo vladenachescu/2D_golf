@@ -38,7 +38,7 @@ void Level::incarca(int nrNivel, std::istream& in) {
     int pairId;
 
     for (int i = 0; i < nrObs; i++) {
-        pairId = i;
+
         std::string tip;
         std::cout << "  Obstacol " << i+1 << " (tip [WALL/WATER/SAND/BLACK_HOLE/WHITE_HOLE] si parametri): ";
         in >> tip;
@@ -59,6 +59,7 @@ void Level::incarca(int nrNivel, std::istream& in) {
             obstacole.push_back(std::make_shared<Sand>(xmin, xmax, ymin, ymax));
 
         } else if (tip == "BLACK_HOLE" || tip == "BLACKHOLE" || tip == "WHITE_HOLE" || tip == "WHITEWHOLE") {
+            pairId = i;
             float cx, cy, razaInfluenta, razaAbsorbtie;
             std::cout<< "cx, cy, razaInfluenta, razaAbsorbtie";
             in >> cx >> cy >> razaInfluenta >> razaAbsorbtie;
@@ -72,6 +73,7 @@ void Level::incarca(int nrNivel, std::istream& in) {
             obstacole.push_back(wh);
             gauriAlbe[pairId] = wh;
             listaGauriAlbe.push_back(wh);
+
 
         }
 
