@@ -47,10 +47,6 @@ void WhiteHole::energizeaza(Ball& b, const Vector2D& directieIntrare) const {
     std::cout << ">> Gaura alba respinge mingea!\n";
 }
 
-const Vector2D& WhiteHole::getCentru() const {
-    return centru;
-}
-
 
 std::ostream& WhiteHole::afisare(std::ostream& os) const {
     Obstacle::afisare(os);
