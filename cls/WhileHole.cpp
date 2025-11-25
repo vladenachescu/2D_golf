@@ -54,3 +54,8 @@ const Vector2D& WhiteHole::getCentru() const {
 float WhiteHole::getRazaRepulsie() const {
     return razaRepulsie;
 }
+std::ostream& WhiteHole::afisare(std::ostream& os) const {
+    Obstacle::afisare(os);
+    os << " {Centru: " << centru << ", Respingere: " << fortaRepulsie << "}";
+    return os;
+}

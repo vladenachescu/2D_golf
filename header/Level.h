@@ -23,10 +23,9 @@ public:
 
     void incarca(int nrNivel, std::istream& in);
     bool simuleaza(std::istream& in);
-
-    // MODIFICARE: Functii adaugate pentru a permite testarea in main()
     void adaugaObstacol(const std::shared_ptr<Obstacle>& obs);
     void reseteazaMinge();
-    Ball& getMinge(); // Returnam referinta ca sa o putem modifica in teste
+    Ball& getMinge();
+    friend std::ostream& operator<<(std::ostream& os, const Level& level);
 
 };

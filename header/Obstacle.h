@@ -14,6 +14,8 @@ public:
     [[nodiscard]] virtual std::string tip() const = 0;
     [[nodiscard]] bool intersecteaza(const Vector2D& v) const;
     [[nodiscard]] bool intersecteazaLinie(const Vector2D& a, const Vector2D& b) const;
+    virtual std::ostream& afisare(std::ostream& os) const;
+
     virtual ~Obstacle() = default;
     friend std::ostream& operator<<(std::ostream& os, const Obstacle& o);
 };

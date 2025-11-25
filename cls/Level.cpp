@@ -1,17 +1,15 @@
 #include "Level.h"
 #include <iostream>
-#include <random>
+#include <vector>
 #include <string>
-#include <unordered_map>
-#include <utility>
 #include <algorithm>
-
-// Aceste include-uri sunt necesare pentru dynamic_cast si logica din incarca
-#include <ranges>
-
 #include "BlackHole.h"
 #include "WhiteHole.h"
+#include "Wall.h"
+#include "Water.h"
+#include "Sand.h"
 
+// Constructor
 Level::Level(const Ball& mingeInit, const Hole& gauraInit, std::vector<std::shared_ptr<Obstacle>> obstacoleInit)
     : minge(mingeInit), gaura(gauraInit), obstacole(std::move(obstacoleInit)) {}
 
@@ -20,129 +18,93 @@ void Level::incarca(int nrNivel, std::istream& in) {
     float xStart, yStart;
     std::cout << "Pozitie start minge (x y): ";
     in >> xStart >> yStart;
-
+    minge = Ball(Vector2D(xStart, yStart));
     float hx, hy, hr;
     std::cout << "Pozitie si raza gaura (x y r): ";
     in >> hx >> hy >> hr;
     gaura = Hole(Vector2D(hx, hy), hr);
-
     int nrObs;
     std::cout << "Numar obstacole: ";
     in >> nrObs;
     obstacole.clear();
-
-    std::unordered_map<int, std::shared_ptr<BlackHole>> gauriNegre;
-    std::unordered_map<int, std::shared_ptr<WhiteHole>> gauriAlbe;
-    std::vector<std::shared_ptr<WhiteHole>> listaGauriAlbe;
-
-    int pairId;
-
     for (int i = 0; i < nrObs; i++) {
-
         std::string tip;
-        std::cout << "  Obstacol " << i+1 << " (tip [WALL/WATER/SAND/BLACK_HOLE/WHITE_HOLE] si parametri): ";
+        std::cout << "  Obstacol " << i+1 << " (tip [WALL/WATER/SAND/WORM_HOLES]: ";
         in >> tip;
+        std::shared_ptr<Obstacle> nouObstacol = nullptr;
         if (tip == "WALL") {
             float xmin, xmax, ymin, ymax;
-            std::cout<< "xmin xmax yman ymax: ";
+            std::cout << "xmin xmax ymin ymax: ";
             in >> xmin >> xmax >> ymin >> ymax;
-            obstacole.push_back(std::make_shared<Wall>(xmin, xmax, ymin, ymax));
-        } else if (tip == "WATER") {
+            nouObstacol = std::make_shared<Wall>(xmin, xmax, ymin, ymax);
+        }
+        else if (tip == "WATER") {
             float xmin, xmax, ymin, ymax;
-            std::cout<< "xmin xmax yman ymax: ";
+            std::cout << "xmin xmax ymin ymax: ";
             in >> xmin >> xmax >> ymin >> ymax;
-            obstacole.push_back(std::make_shared<Water>(xmin, xmax, ymin, ymax));
-        } else if (tip == "SAND") {
+            nouObstacol = std::make_shared<Water>(xmin, xmax, ymin, ymax);
+        }
+        else if (tip == "SAND") {
             float xmin, xmax, ymin, ymax;
-            std::cout<< "xmin xmax yman ymax: ";
+            std::cout << "xmin xmax ymin ymax: ";
             in >> xmin >> xmax >> ymin >> ymax;
-            obstacole.push_back(std::make_shared<Sand>(xmin, xmax, ymin, ymax));
-
-        } else if (tip == "BLACK_HOLE" || tip == "BLACKHOLE" || tip == "WHITE_HOLE" || tip == "WHITEWHOLE") {
-            pairId = i;
-            float cx, cy, razaInfluenta, razaAbsorbtie;
-            std::cout<< "cx, cy, razaInfluenta, razaAbsorbtie \n";
-            in >> cx >> cy >> razaInfluenta >> razaAbsorbtie;
-            auto gh = std::make_shared<BlackHole>(Vector2D(cx, cy), razaInfluenta, razaAbsorbtie, pairId);
-            obstacole.push_back(gh);
-            gauriNegre[pairId] = gh;
-            std::cout<< "daca ai una trebuie sa o ai si pe cealalata!\n\n";
-            std::cout<< "cx cy razaRepulsie";
-            float razaRepulsie;
-            in >> cx >> cy >> razaRepulsie;
-            auto wh = std::make_shared<WhiteHole>(Vector2D(cx, cy), razaRepulsie, pairId);
-            obstacole.push_back(wh);
-            gauriAlbe[pairId] = wh;
-            listaGauriAlbe.push_back(wh);
-
-
+            nouObstacol = std::make_shared<Sand>(xmin, xmax, ymin, ymax);
         }
-
-         else {
-            std::cerr << "Tip de obstacol necunoscut: " << tip << "\n";
-        }
-    }
-
-    // Legare gauri negre de albe
-    for (const auto& [id, gh] : gauriNegre) {
-        auto it = gauriAlbe.find(id);
-        if (it != gauriAlbe.end()) {
-            gh->seteazaDestinatie(it->second);
-            it->second->seteazaSursa(gh);
-        }
-    }
-
-
-
-    // Ajustare pozitie initiala daca e prea aproape de White Hole
-    Vector2D pozInitiala(xStart, yStart);
-    bool ajustata = false;
-    for (const auto& wh : listaGauriAlbe) {
-        float dist = pozInitiala.dist(wh->getCentru());
-        if (dist < wh->getRazaRepulsie()) {
-            Vector2D directie = (pozInitiala - wh->getCentru()).normalizat();
-            if (directie.lungime() < 1e-4f) {
-                directie = Vector2D(1.0f, 0.0f);
+        else if (tip == "WORM_HOLES") {
+            float cx, cy, rInf, rAbs;
+            std::cout << "Gaura Neagra (cx cy razaInfluenta razaAbsorbtie): ";
+            in >> cx >> cy >> rInf >> rAbs;
+            auto gh = std::make_shared<BlackHole>(Vector2D(cx, cy), rInf, rAbs, 30.0f);
+            float wcx, wcy, wRep;
+            std::cout << "Gaura Alba Pereche (cx cy razaRepulsie): ";
+            in >> wcx >> wcy >> wRep;
+            auto wh = std::make_shared<WhiteHole>(Vector2D(wcx, wcy), wRep);
+            if (gh->intersecteaza(minge.getPoz()) || wh->intersecteaza(minge.getPoz())) {
+                std::cout << ">> EROARE: Nu poti pune o gaura peste minge! Pozitia mingii: " << minge.getPoz() << "\n";
+                i--;
+                continue;
             }
-            float buffer = 0.5f;
-            pozInitiala = wh->getCentru() + directie * (wh->getRazaRepulsie() + buffer);
-            ajustata = true;
+            gh->seteazaDestinatie(wh);
+            wh->seteazaSursa(gh);
+            obstacole.push_back(gh);
+            obstacole.push_back(wh);
+            continue;
+        }
+        else {
+            std::cerr << "Tip de obstacol necunoscut: " << tip << "\n";
+            i--;
+            continue;
+        }
+
+        if (nouObstacol != nullptr) {
+            if (nouObstacol->intersecteaza(minge.getPoz())) {
+                std::cout << ">> EROARE: Obstacolul se suprapune cu mingea (" << minge.getPoz() << ")! Reintrodu coordonatele.\n";
+                i--;
+                continue;
+            }
+            obstacole.push_back(nouObstacol);
         }
     }
-    if (ajustata) {
-        std::cout << "Pozitia initiala a fost ajustata pentru a evita zona de respingere a unei gauri albe.\n";
-    }
-    minge = Ball(pozInitiala);
-    std::cout << "Pozitie initiala minge: " << minge << "\n";
+
 }
 
 bool Level::simuleaza(std::istream& in) {
-    std::cout << "\n--- START NIVEL ---\n";
-    std::cout << gaura << "\n";
-    std::cout << "Obstacole:\n";
 
-    bool areGauriWormhole = false;
-    for (const auto& o : obstacole) {
-        if (!areGauriWormhole &&
-            (dynamic_cast<const BlackHole*>(o.get()) != nullptr ||
-             dynamic_cast<const WhiteHole*>(o.get()) != nullptr)) {
-            areGauriWormhole = true;
-             }
-        std::cout << "  - " << *o << "\n";
-    }
+    std::cout << *this;
 
     int lovituri = 0;
 
     while (true) {
         float unghi, forta;
-        std::cout << "\n[Lovitura " << ++lovituri << "] Unghi si forta (grade, valoare) sau -1 pentru iesire: ";
+        std::cout << "\n[Lovitura " << ++lovituri << "] Unghi si forta (grade, valoare) sau -1 -1 pt iesire: ";
         if (!(in >> unghi >> forta)) return false;
         if (unghi == -1 && forta == -1) return false;
 
         minge.loveste(forta, unghi);
 
-        // Bucla fizica
-        for (int t = 0; t < 300; t++) {
+        bool miscare = true;
+        int pasi = 0;
+        while (miscare && pasi < 500) {
             constexpr float dt = 0.1f;
             Vector2D prev = minge.getPoz();
             minge.actualizeazaPozitia(dt);
@@ -151,12 +113,40 @@ bool Level::simuleaza(std::istream& in) {
                 o->interact(minge, prev, dt);
 
             if (gaura.contine(minge.getPoz())) {
-                std::cout << ">> Minge in gaura dupa " << lovituri << " lovituri!\n";
+                std::cout << ">> GOL! Minge in gaura dupa " << lovituri << " lovituri!\n";
                 return true;
             }
 
-            if (minge.vitezaMica()) break;
+            if (minge.vitezaMica()) miscare = false;
+            pasi++;
         }
         std::cout << minge << "\n";
     }
+}
+
+void Level::adaugaObstacol(const std::shared_ptr<Obstacle>& obs) {
+    obstacole.push_back(obs);
+}
+
+void Level::reseteazaMinge() {
+    minge.reseteaza();
+}
+
+Ball& Level::getMinge() {
+    return minge;
+}
+
+std::ostream& operator<<(std::ostream& os, const Level& level) {
+    os << "=== STARE NIVEL ===\n";
+
+    os << "Minge: " << level.minge << "\n";
+
+    os << "Tinta: " << level.gaura << "\n";
+
+    os << "Obstacole (" << level.obstacole.size() << "):\n";
+    for (const auto& obs : level.obstacole) {
+        os << "  -> " << *obs << "\n";
+    }
+
+    return os;
 }

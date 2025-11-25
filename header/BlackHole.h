@@ -18,4 +18,5 @@ public:
     [[nodiscard]] std::string tip() const override;
     void seteazaDestinatie(const std::shared_ptr<WhiteHole>& white);
     [[nodiscard]] const Vector2D& getCentru() const;
+    std::ostream& afisare(std::ostream& os) const override;
 };

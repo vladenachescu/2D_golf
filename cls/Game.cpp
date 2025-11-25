@@ -98,7 +98,12 @@ void Game::start() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Game& game) {
-    os << "Game (Nivele: " << game.nrNivele << ", Capacitate: " << game.capacitate
-       << ", Scor: " << game.scor << ")";
+    os << "Joc Golf - Scor Curent: " << game.scor << "/" << game.nrNivele << "\n";
+
+
+    for(int i = 0; i < game.nrNivele; ++i) {
+        os << "\nDetalii Nivel " << (i+1) << ":\n";
+        os << game.nivele[i];
+    }
     return os;
 }

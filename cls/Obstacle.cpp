@@ -17,8 +17,14 @@ bool Obstacle::intersecteazaLinie(const Vector2D& a, const Vector2D& b) const {
     return !(amaxX < xmin || aminX > xmax || amaxY < ymin || aminY > ymax);
 }
 
-std::ostream& operator<<(std::ostream& os, const Obstacle& o) {
-    os << o.tip() << " [" << o.xmin << "," << o.ymin << "] -> ["
-       << o.xmax << "," << o.ymax << "]";
+std::ostream& Obstacle::afisare(std::ostream& os) const {
+    os << this->tip() << " [" << xmin << "," << ymin << "] -> ["
+       << xmax << "," << ymax << "]";
     return os;
 }
+
+
+std::ostream& operator<<(std::ostream& os, const Obstacle& o) {
+    return o.afisare(os);
+}
+

@@ -20,4 +20,5 @@ public:
     void energizeaza(Ball& b, const Vector2D& directieIntrare) const;
     [[nodiscard]] const Vector2D& getCentru() const;
     [[nodiscard]] float getRazaRepulsie() const;
+    std::ostream& afisare(std::ostream& os) const override;
 };
