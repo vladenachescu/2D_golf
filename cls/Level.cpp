@@ -124,17 +124,6 @@ bool Level::simuleaza(std::istream& in) {
     }
 }
 
-void Level::adaugaObstacol(const std::shared_ptr<Obstacle>& obs) {
-    obstacole.push_back(obs);
-}
-
-void Level::reseteazaMinge() {
-    minge.reseteaza();
-}
-
-Ball& Level::getMinge() {
-    return minge;
-}
 
 std::ostream& operator<<(std::ostream& os, const Level& level) {
     os << "=== STARE NIVEL ===\n";

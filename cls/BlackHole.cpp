@@ -44,11 +44,6 @@ void BlackHole::seteazaDestinatie(const std::shared_ptr<WhiteHole>& white) {
     destinatie = white;
 }
 
-const Vector2D& BlackHole::getCentru() const {
-    return centru;
-
-
-}
 
 std::ostream& BlackHole::afisare(std::ostream& os) const {
 
