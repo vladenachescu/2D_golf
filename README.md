@@ -2,7 +2,11 @@
 
 **2D Golf** este un joc de tip mini-golf în care jucătorul trebuie să introducă mingea în gaură, folosind cât mai puține lovituri.
 
-Un joc va contine mai multe gauri (nivele).
+Jocul va fi configurat de catre jucator.Acesta va putea sa alege numarul de nivele,pozitia gaurii,pozitia de start si numarul obstacolelor,respectiv pozitia acestora.
+
+Odata ce jucatorul a terminat de configurat nivele,scopul acestuie este sa introduca mingea in gaura.Jucatorul va da un unghi (0 grade = axa ox,90 grada = axa oy ...)
+
+Nivelul se va sfarsi odata ce mingea a intrat in gaura,jocul se va sfarsi odata ce jucatorul a terminat toate nivele sau daca pune -1 in terminal
 
 Am implementat 5 tipuri de obstacole
 
@@ -20,6 +24,8 @@ Am implementat 5 tipuri de obstacole
 
 -WhiteHole este opusul unei gauri negre.
 Ea respinge mingea care ajunge în apropiere, ampingand-o înapoi și încetinind-o.
+
+PENTRU A ALEGE WHITEHOLE/BLACKHOLE,FOLOSIM KEYWORDUL WORMHOLE IN TERMINAL CAND NI SE CERE DENUMIRE OBSTACOL.
 
 Mingea care a fost „mancata” de un BlackHole va aparea langa un WhiteHole, la un punct random din apropierea razei de repulsie,arunca afara cu o mica viteza.
 
