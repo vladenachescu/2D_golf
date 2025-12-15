@@ -2,7 +2,7 @@
 #include <cmath>
 
 namespace {
-    constexpr float kPi = 3.14159265358979323846f;
+    const float kPi = 3.14159265358979323846f;
     constexpr float kEps = 1e-3f;
 }
 

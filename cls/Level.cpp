@@ -9,7 +9,7 @@
 #include "Water.h"
 #include "Sand.h"
 
-// Constructor
+
 Level::Level(const Ball& mingeInit, const Hole& gauraInit, std::vector<std::shared_ptr<Obstacle>> obstacoleInit)
     : minge(mingeInit), gaura(gauraInit), obstacole(std::move(obstacoleInit)) {}
 

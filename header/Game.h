@@ -1,23 +1,19 @@
 #pragma once
 #include "Level.h"
 #include <iostream>
+#include <vector> // <--- NECESAR PENTRU VECTOR
 
 class Game {
-    Level* nivele;
-    int nrNivele;
-    int capacitate;
+private:
+    // Inlocuim pointerul Level* cu un vector
+    std::vector<Level> nivele;
     int scor;
 
 public:
-    Game();
-    explicit Game(int capacitateInitiala);
-    ~Game();
-    Game(const Game& other);
-    Game& operator=(const Game& other);
 
+    Game();
     void start();
     void adaugaNivel(const Level& nivel);
-    void reseteazaJoc();
     void afiseazaScorFinal() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Game& game);

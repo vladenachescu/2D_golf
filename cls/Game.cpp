@@ -1,77 +1,18 @@
 #include "Game.h"
 #include <iostream>
-using namespace std;
 
 
-Game::Game() : nivele(nullptr), nrNivele(0), capacitate(0), scor(0) {}
-
-Game::Game(int capacitateInitiala)
-    : nivele(nullptr), nrNivele(0), capacitate(capacitateInitiala), scor(0) {
-    if (capacitate > 0) {
-        nivele = new Level[capacitate];
-    } else {
-        capacitate = 0;
-    }
-    std::cout << ">> (Debug) Game creat cu capacitate initiala: " << capacitate << "\n";
-}
-
-Game::~Game() {
-    delete[] nivele;
-}
-
-Game::Game(const Game& other)
-    : nrNivele(other.nrNivele), capacitate(other.capacitate), scor(other.scor) {
-
-    // Alocam memorie separata
-    nivele = new Level[capacitate];
-    // Copiem fiecare nivel
-    for (int i = 0; i < nrNivele; ++i) {
-        nivele[i] = other.nivele[i];
-    }
-    std::cout << ">> (Debug) Copy Constructor apelat.\n";
-}
-
-Game& Game::operator=(const Game& other) {
-    if (this == &other) {
-        return *this;
-    }
-
-    delete[] nivele;
-
-    nrNivele = other.nrNivele;
-    capacitate = other.capacitate;
-    scor = other.scor;
-
-    nivele = new Level[capacitate];
-    for (int i = 0; i < nrNivele; ++i) {
-        nivele[i] = other.nivele[i];
-    }
-
-    return *this;
+Game::Game() : scor(0) {
+    std::cout << ">> (Debug) Game creat (folosind vector).\n";
 }
 
 void Game::adaugaNivel(const Level& nivel) {
-    if (nrNivele == capacitate) {
-        int newCap = (capacitate == 0) ? 2 : capacitate * 2;
-        Level* temp = new Level[newCap];
 
-        for (int i = 0; i < nrNivele; ++i) {
-            temp[i] = nivele[i];
-        }
-
-        delete[] nivele;
-        nivele = temp;
-        capacitate = newCap;
-    }
-
-    nivele[nrNivele] = nivel;
-    nrNivele++;
+    nivele.push_back(nivel);
 }
 
-
-
 void Game::afiseazaScorFinal() const {
-    std::cout << "Scor final: " << scor << "/" << nrNivele << "\n";
+    std::cout << "Scor final: " << scor << "/" << nivele.size() << "\n";
 }
 
 void Game::start() {
@@ -82,28 +23,30 @@ void Game::start() {
     int n;
     std::cout << "Cate nivele vrei sa joci? ";
     std::cin >> n;
-
-
     for (int i = 0; i < n; i++) {
         Level nivelTemp;
         nivelTemp.incarca(i + 1, std::cin);
         this->adaugaNivel(nivelTemp);
+    }
+    for (size_t i = 0; i < nivele.size(); ++i) {
         std::cout << "\n=== START JOC NIVEL " << i+1 << " ===\n";
-        bool win = nivele[nrNivele - 1].simuleaza(std::cin);
+        bool win = nivele[i].simuleaza(std::cin);
 
         if (win) scor++;
     }
+
     afiseazaScorFinal();
     std::cout << "\n=== Joc terminat! ===\n";
 }
 
 std::ostream& operator<<(std::ostream& os, const Game& game) {
-    os << "Joc Golf - Scor Curent: " << game.scor << "/" << game.nrNivele << "\n";
+    os << "Game (Nivele: " << game.nivele.size() << ", Scor: " << game.scor << ")\n";
 
 
-    for(int i = 0; i < game.nrNivele; ++i) {
-        os << "\nDetalii Nivel " << (i+1) << ":\n";
-        os << game.nivele[i];
+    for(size_t i = 0; i < game.nivele.size(); ++i) {
+        os << "Detaliu Nivel " << i+1 << ":\n";
+        os << game.nivele[i] << "\n";
     }
+
     return os;
 }
