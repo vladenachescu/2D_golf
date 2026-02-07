@@ -9,9 +9,34 @@
 #include "Water.h"
 #include "Sand.h"
 
-// Constructor
+
+
 Level::Level(const Ball& mingeInit, const Hole& gauraInit, std::vector<std::shared_ptr<Obstacle>> obstacoleInit)
-    : minge(mingeInit), gaura(gauraInit), obstacole(std::move(obstacoleInit)) {}
+    : minge(mingeInit), startPoz(mingeInit.getPoz()), gaura(gauraInit), obstacole(std::move(obstacoleInit)) {}
+
+// [NEW] Copy Constructor (Deep Copy)
+Level::Level(const Level& other) 
+    : minge(other.minge), startPoz(other.startPoz), gaura(other.gaura) {
+    obstacole.reserve(other.obstacole.size());
+    for (const auto& obs : other.obstacole) {
+        obstacole.push_back(obs->clone());
+    }
+}
+
+// [NEW] Assignment Operator (Copy-and-Swap idiom implies we could use a swap, but standard assign is fine here)
+Level& Level::operator=(const Level& other) {
+    if (this != &other) {
+        minge = other.minge;
+        startPoz = other.startPoz;
+        gaura = other.gaura;
+        obstacole.clear();
+        obstacole.reserve(other.obstacole.size());
+        for (const auto& obs : other.obstacole) {
+            obstacole.push_back(obs->clone());
+        }
+    }
+    return *this;
+}
 
 void Level::incarca(int nrNivel, std::istream& in) {
     std::cout << "\n=== Configurare nivel " << nrNivel << " ===\n";
@@ -19,6 +44,8 @@ void Level::incarca(int nrNivel, std::istream& in) {
     std::cout << "Pozitie start minge (x y): ";
     in >> xStart >> yStart;
     minge = Ball(Vector2D(xStart, yStart));
+    startPoz = Vector2D(xStart, yStart);
+
     float hx, hy, hr;
     std::cout << "Pozitie si raza gaura (x y r): ";
     in >> hx >> hy >> hr;
@@ -88,41 +115,70 @@ void Level::incarca(int nrNivel, std::istream& in) {
 
 }
 
-bool Level::simuleaza(std::istream& in) {
 
-    std::cout << *this;
-
-    int lovituri = 0;
-
-    while (true) {
-        float unghi, forta;
-        std::cout << "\n[Lovitura " << ++lovituri << "] Unghi si forta (grade, valoare) sau -1 -1 pt iesire: ";
-        if (!(in >> unghi >> forta)) return false;
-        if (unghi == -1 && forta == -1) return false;
-
-        minge.loveste(forta, unghi);
-
-        bool miscare = true;
-        int pasi = 0;
-        while (miscare && pasi < 500) {
-            constexpr float dt = 0.1f;
-            Vector2D prev = minge.getPoz();
-            minge.actualizeazaPozitia(dt);
-
-            for (const auto& o : obstacole)
-                o->interact(minge, prev, dt);
-
-            if (gaura.contine(minge.getPoz())) {
-                std::cout << ">> GOL! Minge in gaura dupa " << lovituri << " lovituri!\n";
-                return true;
-            }
-
-            if (minge.vitezaMica()) miscare = false;
-            pasi++;
-        }
-        std::cout << minge << "\n";
+void Level::update(float dt) {
+    Vector2D prev = minge.getPoz();
+    minge.actualizeazaPozitia(dt);
+    
+    // World Boundary Check (0-80, 0-60)
+    Vector2D pos = minge.getPoz();
+    float r = minge.getRaza();
+    bool hit = false;
+    
+    // Left
+    if (pos.getX() - r < 0.0f) {
+        minge.setPoz(Vector2D(r + 0.01f, pos.getY()));
+        minge.reflecta(Vector2D(1, 0));
+        hit = true;
     }
+    // Right
+    else if (pos.getX() + r > 80.0f) {
+        minge.setPoz(Vector2D(80.0f - r - 0.01f, pos.getY()));
+        minge.reflecta(Vector2D(-1, 0));
+        hit = true;
+    }
+    
+    // Top
+    if (pos.getY() - r < 0.0f) {
+         minge.setPoz(Vector2D(pos.getX(), r + 0.01f));
+         minge.reflecta(Vector2D(0, 1));
+         hit = true;
+    }
+    // Bottom
+    else if (pos.getY() + r > 60.0f) {
+        minge.setPoz(Vector2D(pos.getX(), 60.0f - r - 0.01f));
+        minge.reflecta(Vector2D(0, -1));
+        hit = true;
+    }
+    
+    if (hit) std::cout << ">> Loveste marginea hartii!\n";
+
+    for (const auto& o : obstacole)
+        o->interact(minge, prev, dt);
 }
+
+void Level::render(sf::RenderTarget& target) {
+    // Draw obstacles
+    for (const auto& o : obstacole) {
+        o->render(target);
+    }
+    // Draw Hole
+    gaura.render(target);
+    // Draw Ball
+    minge.render(target);
+}
+
+bool Level::isFinished() const {
+    return gaura.contine(minge.getPoz());
+}
+
+/* 
+// Deprecated console simulation
+bool Level::simuleaza(std::istream& in) {
+    // ... (original content commented out or removed)
+    return false;
+} 
+*/
 
 
 std::ostream& operator<<(std::ostream& os, const Level& level) {
@@ -139,3 +195,10 @@ std::ostream& operator<<(std::ostream& os, const Level& level) {
 
     return os;
 }
+
+
+void Level::reseteazaMinge() {
+    minge.seteazaPozitia(startPoz);
+}
+
+Ball& Level::getMinge() { return minge; }

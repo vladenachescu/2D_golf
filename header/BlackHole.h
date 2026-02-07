@@ -16,7 +16,15 @@ public:
     BlackHole(const Vector2D& centru, float razaInfluenta, float razaAbsorbtie, float forta=30.0f);
     void interact(Ball& b, const Vector2D& prev, float dt) override;
     [[nodiscard]] std::string tip() const override;
+    void render(sf::RenderTarget& target) const override;
     void seteazaDestinatie(const std::shared_ptr<WhiteHole>& white);
     [[nodiscard]] const Vector2D& getCentru() const;
+    
+    // [NEW] Virtual Constructor
+    [[nodiscard]] std::shared_ptr<Obstacle> clone() const override {
+        return std::make_shared<BlackHole>(*this);
+    }
+
+protected:
     std::ostream& afisare(std::ostream& os) const override;
 };

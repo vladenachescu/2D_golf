@@ -24,6 +24,16 @@ std::string WhiteHole::tip() const {
     return "Gaura Alba";
 }
 
+void WhiteHole::render(sf::RenderTarget& target) const {
+    sf::CircleShape circle(razaRepulsie * 10.0f);
+    circle.setFillColor(sf::Color::White);
+    circle.setOutlineColor(sf::Color::Cyan);
+    circle.setOutlineThickness(3.0f); // Thicker outline for WhiteHole visibility
+    circle.setOrigin({razaRepulsie * 10.0f, razaRepulsie * 10.0f});
+    circle.setPosition({centru.getX() * 10.0f, centru.getY() * 10.0f});
+    target.draw(circle);
+}
+
 void WhiteHole::seteazaSursa(const std::shared_ptr<BlackHole>& black) {
     sursa = black;
 }

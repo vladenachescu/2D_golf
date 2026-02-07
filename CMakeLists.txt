@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 3.26)
 
+
+# [FIX] Force old projects to use newer CMake policies
+set(CMAKE_POLICY_VERSION_MINIMUM "3.5" CACHE STRING "Fix for old dependencies" FORCE)
+
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing executable name in this file
 # for now, the project name is used as the executable name
-set(MAIN_PROJECT_NAME "oop")
+set(MAIN_PROJECT_NAME "golf")
 set(MAIN_EXECUTABLE_NAME "${MAIN_PROJECT_NAME}")
-
 
 
 project(${MAIN_PROJECT_NAME})
@@ -12,7 +15,7 @@ project(${MAIN_PROJECT_NAME})
 # set(CMAKE_PROJECT_VERSION_MINOR 0)
 # set(CMAKE_PROJECT_VERSION_PATCH 1)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -23,22 +26,15 @@ include(cmake/CopyHelper.cmake)
 ###############################################################################
 
 # external dependencies with FetchContent
-# include(FetchContent)
-#
-# set(FETCHCONTENT_QUIET OFF)
-# set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
-#
-# NOTE: Also update env vars used for caching in
-#         - .github/actions/configure-cmake/action.yml
-#         - .github/workflows/cmake.yml
-# FetchContent_Declare(
-#         SomeLib
-#         GIT_REPOSITORY https://github.com/<SomeUser>/<SomeLib>.git
-#         GIT_TAG        <some_git_hash> # <which tag/branch @ <some_date>>
-#         GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
-# )
-#
-# FetchContent_MakeAvailable(SomeLib)
+include(FetchContent)
+
+FetchContent_Declare(
+        SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG        3.0.0
+)
+
+FetchContent_MakeAvailable(SFML)
 
 ###############################################################################
 
@@ -46,40 +42,25 @@ include(cmake/CopyHelper.cmake)
 
 # find_package(Threads REQUIRED)
 
+###############################################################################
 
-add_executable(${MAIN_EXECUTABLE_NAME}
-        main.cpp
-        header/Vector2D.h
-        cls/Vector2D.cpp
-        cls/Ball.cpp
-        header/Ball.h
-        cls/Hole.cpp
-        header/Hole.h
-        header/Obstacle.h
-        cls/Obstacle.cpp
-        header/Wall.h
-        cls/Wall.cpp
-        header/Water.h
-        cls/Water.cpp
-        header/Sand.h
-        cls/Sand.cpp
-        header/Level.h
-        cls/Level.cpp
-        header/Game.h
-        cls/Game.cpp
-        header/BlackHole.h
-        header/WhiteHole.h
-        cls/BlackHole.cpp
-        cls/WhileHole.cpp
+# Collect all source files
+file(GLOB_RECURSE SOURCES
+    "cls/*.cpp"
+    "header/*.h"
 )
 
-target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/header)
-
-
-
-
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
+add_executable(${MAIN_EXECUTABLE_NAME}
+    main.cpp
+    ${SOURCES}
+)
 
+# Include directories
+target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE header)
+
+# Link SFML
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
 # NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
@@ -105,6 +86,6 @@ if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-copy_files(FILES tastatura.txt COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+copy_files(FILES tastatura.txt hole.png menu_button.png sand.png wall.png water.png grass.png ball.png COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})

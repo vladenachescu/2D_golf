@@ -1,28 +1,3 @@
-# ⛳ 2D Golf
-
-**2D Golf** este un joc de tip mini-golf în care jucătorul trebuie să introducă mingea în gaură, folosind cât mai puține lovituri.
-
-Un joc va contine mai multe gauri (nivele).
-
-Am implementat 5 tipuri de obstacole
-
--Wall : Reflecta mingea.
-
--Sand : Incetineste mingea.
-
--Water : reseteaza mingea la ultima pozitie dinaintea loviturii
-
--BlackHole se comportă ca o gaura neagra:
-  daca mingea ajunge prea aproape, incepe să fie trasa spre ea.
-  Cu cat se apropie mai mult, cu atat este atrasa mai tare.
-  Daca mingea ajunge prea aproape de centrul gaurii negre, este absorbita complet si dispare de pe teren.
-  Dupa csteva momente, ea va reaparea în alta parte, fiind „scuipata” de o WhiteHole
-
--WhiteHole este opusul unei gauri negre.
-Ea respinge mingea care ajunge în apropiere, ampingand-o înapoi și încetinind-o.
-
-Mingea care a fost „mancata” de un BlackHole va aparea langa un WhiteHole, la un punct random din apropierea razei de repulsie,arunca afara cu o mica viteza.
-
 # Nu primesc notă pentru că nu am pus titlu și descriere
 
 ### Folosiți template-ul corespunzător grupei voastre!
@@ -81,7 +56,7 @@ O cerință nu se consideră îndeplinită dacă este realizată doar prin cod g
 #### Cerințe
 - [ ] separarea codului din clase în `.h` (sau `.hpp`) și `.cpp`
 - [ ] moșteniri:
-  - minim o clasă de bază și **3 clase derivate** din aceeași ierarhie
+  - minim o clasă de bază și **3 clase derivate** din aceeași ierarhie; cele 3 derivate moștenesc aceeași clasă de bază
   - ierarhia trebuie să fie cu bază proprie, nu derivată dintr-o clasă predefinită
   - [ ] funcții virtuale (pure) apelate prin pointeri de bază din clasa care conține atributul de tip pointer de bază
     - minim o funcție virtuală va fi **specifică temei** (i.e. nu simple citiri/afișări sau preluate din biblioteci i.e. draw/update/render)

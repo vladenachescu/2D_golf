@@ -30,7 +30,7 @@ void BlackHole::interact(Ball& b, const Vector2D& prev, float dt) {
         return;
     }
     if (dist <= razaInfluenta && dist > 1e-4f) {
-        float strength = fortaGravitationala / (dist * dist + 1.0f);
+        float strength = fortaGravitationala / (dist * dist+2);
         Vector2D acceleratie = catreCentru.normalizat() * strength;
         b.aplicaAcceleratie(acceleratie, dt);
     }
@@ -38,6 +38,25 @@ void BlackHole::interact(Ball& b, const Vector2D& prev, float dt) {
 
 std::string BlackHole::tip() const {
     return "Gaura Neagra";
+}
+
+void BlackHole::render(sf::RenderTarget& target) const {
+    sf::CircleShape circle(razaInfluenta * 10.0f);
+    circle.setFillColor(sf::Color(20, 0, 20)); // Dark purple/black
+    circle.setOutlineColor(sf::Color::Magenta);
+    circle.setOutlineThickness(2.0f);
+    circle.setOrigin({razaInfluenta * 10.0f, razaInfluenta * 10.0f});
+    circle.setPosition({centru.getX() * 10.0f, centru.getY() * 10.0f});
+    target.draw(circle);
+    
+    // Inner absorption zone
+    sf::CircleShape inner(razaAbsorbtie * 10.0f);
+    inner.setFillColor(sf::Color::Black);
+    inner.setOutlineColor(sf::Color::White); // High contrast for absorption zone
+    inner.setOutlineThickness(1.0f);
+    inner.setOrigin({razaAbsorbtie * 10.0f, razaAbsorbtie * 10.0f});
+    inner.setPosition({centru.getX() * 10.0f, centru.getY() * 10.0f});
+    target.draw(inner);
 }
 
 void BlackHole::seteazaDestinatie(const std::shared_ptr<WhiteHole>& white) {

@@ -9,6 +9,9 @@ float Vector2D::dist(const Vector2D& o) const {
 float Vector2D::lungime() const {
     return std::sqrt(x * x + y * y);
 }
+float Vector2D::dot(const Vector2D& o) const {
+    return x * o.x + y * o.y;
+}
 Vector2D Vector2D::normalizat() const {
     float len = lungime();
     if (len < 1e-6f) return Vector2D(0,0);
