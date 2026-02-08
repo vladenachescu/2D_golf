@@ -211,7 +211,15 @@ jobs:
               echo "Public repo"
           fi
 
-      - name: Install packages
+      - name: Install packages (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build xorg-dev libudev-dev libgl1-mesa-dev libvorbis-dev libflac-dev libogg-dev libopenal-dev
+          sudo sysctl vm.mmap_rnd_bits=28
+
+      - name: Install packages (Other)
+        if: runner.os != 'Linux'
         uses: ./.github/actions/install-packages
 
       - name: Configure CMake
