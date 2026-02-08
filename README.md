@@ -4,10 +4,10 @@
 Jocul simulează o experiență de "Mini Golf" cu diverse tipuri de obstacole și mecanici fizice. Scopul este să introduceți mingea în gaură din cât mai puține lovituri.
 
 ## Controale
-*   **Mouse Stânga (Trage și Eliberează):** Pentru a lovi mingea.
-    *   Click pe minge și trageți în direcția opusă țintei (ca o praștie).
+*   **Mouse Stânga :** .
+    *   Click și trageți în direcția opusă țintei.
     *   O săgeată va indica direcția și puterea loviturii.
-    *   Eliberați butonul pentru a lovi.
+    *   Eliberați butonul pentru a lovi mingea sau plasați cursorul pe poziția de start pentru a anula lovitura.
 *   **Interfață:** Click pe butoane pentru navigare (Play, Exit, Level Select, Back).
 
 ## Nivele și Obstacole
