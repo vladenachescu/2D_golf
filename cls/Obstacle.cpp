@@ -28,20 +28,6 @@ bool Obstacle::intersecteazaLinie(const Vector2D& a, const Vector2D& b) const {
     // If one point inside, returns true
     if (intersecteaza(a) || intersecteaza(b)) return true;
     
-    // Check intersection with diagonals or borders?
-    // Simplified: Check intersection with 4 segments of the box
-    // (This is a simplified approach, usually robust enough for this game)
-    
-    // For this assignment, we can assume accurate collision is handled by derived classes interacting
-    // This base method might be used for "Raycast" checks
-    
-    // Let's implement a proper slab method or similar if needed, 
-    // but for now, let's keep it basic to ensure compilation.
-    
-    return false; // Placeholder if not used heavily, or implement properly.
-    // Given the physics engine likely handles collisions in 'interact', this might be for visibility.
-    // Let's implement a basic check.
-    
     auto ccw = [](Vector2D p1, Vector2D p2, Vector2D p3) {
         return (p3.getY()-p1.getY()) * (p2.getX()-p1.getX()) > (p2.getY()-p1.getY()) * (p3.getX()-p1.getX());
     };
