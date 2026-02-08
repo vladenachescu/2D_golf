@@ -5,9 +5,6 @@ Jocul simulează o experiență de "Mini Golf" cu diverse tipuri de obstacole ș
 
 ## Controale
 *   **Mouse Stânga (Trage și Eliberează):** Pentru a lovi mingea.
-
-## Controale
-*   **Mouse Stânga (Trage și Eliberează):** Pentru a lovi mingea.
     *   Click pe minge și trageți în direcția opusă țintei (ca o praștie).
     *   O săgeată va indica direcția și puterea loviturii.
     *   Eliberați butonul pentru a lovi.
