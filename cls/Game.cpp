@@ -9,7 +9,9 @@ const float SCALE = 10.0f;
 
 Game::Game() :
     state(GameState::MENU_MAIN),
+    currentLevelIndex(0),
     scor(0),
+    isDragging(false),
     titleText(font),
     playButtonText(font),
     exitButtonText(font),
@@ -23,9 +25,7 @@ Game::Game() :
     backgroundSprite(backgroundTexture),
     grassSprite(grassTexture),
     holeSound(holeSoundBuffer),
-    levelCompleteSound(levelCompleteBuffer), // [NEW]
-    currentLevelIndex(0),
-    isDragging(false)
+    levelCompleteSound(levelCompleteBuffer)
 {
     if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) {
         std::cerr << "EROARE: Nu am putut incarca arial.ttf\n";
