@@ -109,7 +109,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-            # renovate: depName=ubuntu
+          # renovate: depName=ubuntu
           - os: ubuntu-22.04
             c: clang-18
             cxx: clang++-18
@@ -211,7 +211,15 @@ jobs:
               echo "Public repo"
           fi
 
-      - name: Install packages
+      - name: Install packages (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev
+          sudo sysctl vm.mmap_rnd_bits=28
+
+      - name: Install packages (Other)
+        if: runner.os != 'Linux'
         uses: ./.github/actions/install-packages
 
       - name: Configure CMake
