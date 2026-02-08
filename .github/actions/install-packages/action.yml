@@ -5,53 +5,40 @@ runs:
   using: "composite"
   steps:
     # Common Linux dependencies
-    - name: Install common Linux Dependencies
-      if: runner.os == 'Linux'
-      uses: ./.github/actions/install-linux-deps
-
-    - name: Install Linux GUI & SFML dependencies
+    - name: Install Linux Dependencies
       shell: bash
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-
-        # Build tools
-        sudo apt-get install -y ninja-build xdotool openbox
-
-        # === REQUIRED for SFML (X11) ===
-        sudo apt-get install -y \
-          libx11-dev \
-          libxrandr-dev \
-          libxcursor-dev \
-          libxi-dev \
-          libgl1-mesa-dev \
-          libudev-dev
-
-        # === SFML text & audio ===
-        sudo apt-get install -y \
-          libfreetype6-dev \
-          libopenal-dev \
-          libvorbis-dev \
-          libflac-dev
-
-        # XCB (optional, but nice to have)
-        sudo apt-get install -y \
-          libxkbcommon-dev \
-          libxkbcommon-x11-dev \
-          libxcb1-dev \
-          libxcb-icccm4-dev \
-          libxcb-image0-dev \
-          libxcb-keysyms1-dev \
-          libxcb-randr0-dev \
-          libxcb-render-util0-dev \
-          libxcb-xinerama0-dev \
-          libxcb-xfixes0-dev
-
+        sudo apt-get install ninja-build xorg-dev libudev-dev libgl1-mesa-dev libvorbis-dev libflac-dev libogg-dev libopenal-dev
         # https://github.com/llvm/llvm-project/issues/78354
         sudo sysctl vm.mmap_rnd_bits=28
+
+    # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
+    - name: Install Clang ${{ matrix.clang_ver }}
+      if: runner.os == 'Linux' && matrix.runs_msan == true
+      # renovate: datasource=github-tags depName=nick-fields/retry versioning=loose
+      uses: nick-fields/retry@v3.0.2
+      with:
+        shell: bash
+        timeout_minutes: 5
+        max_attempts: 3
+        retry_on: error
+        command: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x ./llvm.sh
+          sudo ./llvm.sh ${{ matrix.clang_ver }}
+
+    - name: Install libc++ (Linux Clang ${{ matrix.clang_ver }})
+      shell: bash
+      if: runner.os == 'Linux' && matrix.runs_msan == true
+      run: |
+        # sudo apt-get update
+        sudo apt-get install --no-install-recommends libc++-${{ matrix.clang_ver }}-dev libc++abi-${{ matrix.clang_ver }}-dev
 
     - name: Install valgrind
       shell: bash
       if: runner.os == 'Linux' && matrix.runs_valgrind == true
       run: |
+        # sudo apt-get update
         sudo apt-get install --no-install-recommends valgrind
