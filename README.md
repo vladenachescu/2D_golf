@@ -1,4 +1,20 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# 2D Golf
+
+## Controale
+*   **Mouse Stânga (Trage și Eliberează):** Pentru a lovi mingea.
+    *   Click pe minge și trageți în direcția opusă țintei (ca o praștie).
+    *   O săgeată va indica direcția și puterea loviturii.
+    *   Eliberați butonul pentru a lovi.
+*   **Interfață:** Click pe butoane pentru navigare (Play, Exit, Level Select, Back).
+
+## Nivele și Obstacole
+Jocul conține 11 nivele cu dificultate progresivă și diverse elemente:
+
+*   **Pereți:** Mingea ricoșează.
+*   **Nisip:** Încetinește mingea.
+*   **Apă:** Mingea este resetată la poziția de start.
+*   **Găură Negră:** Atrage mingea gravitațional.
+*   **Găură Albă:** Resping mingea sau funcționează ca destinație de teleportare pentru găurile negre.
 
 ### Folosiți template-ul corespunzător grupei voastre!
 
