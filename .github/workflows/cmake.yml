@@ -215,7 +215,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install ninja-build libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev
+          sudo apt-get install ninja-build xorg-dev libudev-dev libgl1-mesa-dev
           sudo sysctl vm.mmap_rnd_bits=28
 
       - name: Install packages (Other)
