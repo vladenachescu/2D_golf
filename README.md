@@ -1,5 +1,11 @@
 # 2D Golf
 
+## Descriere
+Jocul simulează o experiență de "Mini Golf" cu diverse tipuri de obstacole și mecanici fizice. Scopul este să introduceți mingea în gaură din cât mai puține lovituri.
+
+## Controale
+*   **Mouse Stânga (Trage și Eliberează):** Pentru a lovi mingea.
+
 ## Controale
 *   **Mouse Stânga (Trage și Eliberează):** Pentru a lovi mingea.
     *   Click pe minge și trageți în direcția opusă țintei (ca o praștie).
@@ -8,7 +14,7 @@
 *   **Interfață:** Click pe butoane pentru navigare (Play, Exit, Level Select, Back).
 
 ## Nivele și Obstacole
-Jocul conține 11 nivele cu dificultate progresivă și diverse elemente:
+Jocul conține 10 nivele cu dificultate progresivă și diverse elemente:
 
 *   **Pereți:** Mingea ricoșează.
 *   **Nisip:** Încetinește mingea.
