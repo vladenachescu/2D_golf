@@ -22,7 +22,7 @@ private:
     // State
     GameState state;
     std::size_t currentLevelIndex;
-    int scor;
+    [[maybe_unused]]int scor;
     int strokes = 0; // [NEW]
     float animationTimer = 0.0f; // [NEW]
     

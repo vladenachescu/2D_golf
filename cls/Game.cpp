@@ -5,7 +5,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-const float SCALE = 10.0f;
+[[maybe_unused]] float SCALE = 10.0f;
 
 Game::Game() :
     state(GameState::MENU_MAIN),
