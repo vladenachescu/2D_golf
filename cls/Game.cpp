@@ -144,9 +144,6 @@ void Game::initUI() {
     };
 
     // Load Textures (Assets)
-    loadTex(playTexture, "play.png");
-    loadTex(exitTexture, "exit.png");
-    loadTex(backTexture, "menu.png");
     loadTex(backgroundTexture, "meniu2.png");
     loadTex(levelBtnTexture, "menu_button.png");
 
@@ -259,21 +256,29 @@ void Game::initLevels() {
         std::vector<std::shared_ptr<Obstacle>> obs;
         obs.push_back(std::make_shared<Wall>(0, 80, 0, 1)); obs.push_back(std::make_shared<Wall>(0, 80, 59, 60));
         obs.push_back(std::make_shared<Wall>(0, 1, 0, 60)); obs.push_back(std::make_shared<Wall>(79, 80, 0, 60));
-        obs.push_back(std::make_shared<Water>(30, 40, 0, 60));
+        obs.push_back(std::make_shared<Water>(30, 40, 10, 50));
         nivele.emplace_back(b, h, obs);
     }
     // Level 5: The Maze
     {
         Ball b(Vector2D(5, 5));
-        Hole h(Vector2D(75, 55), 1.2f);
+        Hole h(Vector2D(40, 30), 1.2f);
         std::vector<std::shared_ptr<Obstacle>> obs;
         obs.push_back(std::make_shared<Wall>(0, 80, 0, 1)); obs.push_back(std::make_shared<Wall>(0, 80, 59, 60));
         obs.push_back(std::make_shared<Wall>(0, 1, 0, 60)); obs.push_back(std::make_shared<Wall>(79, 80, 0, 60));
         obs.push_back(std::make_shared<Wall>(15, 65, 15, 17));
+        obs.push_back(std::make_shared<Wall>(63, 65, 17, 43));
+        obs.push_back(std::make_shared<Wall>(15, 17, 17, 43));
         obs.push_back(std::make_shared<Wall>(15, 65, 43, 45));
+        auto gh = std::make_shared<BlackHole>(Vector2D(60, 10), 5.0f, 1.0f, 2000.0f);
+        auto wh = std::make_shared<WhiteHole>(Vector2D(20, 30), 3.0f, 250.0f);
+        gh->seteazaDestinatie(wh);
+        wh->seteazaSursa(gh);
+        obs.push_back(gh);
+        obs.push_back(wh);
         nivele.emplace_back(b, h, obs);
     }
-    // Level 6: Black Hole Fun
+
     {
         Ball b(Vector2D(10, 30));
         Hole h(Vector2D(70, 30), 1.2f);
@@ -324,18 +329,18 @@ void Game::initLevels() {
         obs.push_back(std::make_shared<Sand>(50, 60, 20, 40));
         nivele.emplace_back(b, h, obs);
     }
-    // Level 10: Impossible?
+    // Level 10: Impossible
     {
         Ball b(Vector2D(4, 4));
-        Hole h(Vector2D(76, 56), 1.2f);
+        Hole h(Vector2D(25, 30), 1.2f);
         std::vector<std::shared_ptr<Obstacle>> obs;
         obs.push_back(std::make_shared<Wall>(0, 80, 0, 1)); obs.push_back(std::make_shared<Wall>(0, 80, 59, 60));
         obs.push_back(std::make_shared<Wall>(0, 1, 0, 60)); obs.push_back(std::make_shared<Wall>(79, 80, 0, 60));
         obs.push_back(std::make_shared<Water>(10, 20, 0, 60));
         obs.push_back(std::make_shared<Sand>(30, 40, 0, 60));
         obs.push_back(std::make_shared<Wall>(50, 52, 10, 50));
-        auto gh = std::make_shared<BlackHole>(Vector2D(60, 30), 8.0f, 1.0f, 250.0f);
-        auto wh = std::make_shared<WhiteHole>(Vector2D(15, 30), 3.0f);
+        auto gh = std::make_shared<BlackHole>(Vector2D(5, 30), 3.0f, 1.0f, 750.0f);
+        auto wh = std::make_shared<WhiteHole>(Vector2D(60, 30), 5.0f);
         gh->seteazaDestinatie(wh); wh->seteazaSursa(gh);
         obs.push_back(gh); obs.push_back(wh);
         nivele.emplace_back(b, h, obs);
